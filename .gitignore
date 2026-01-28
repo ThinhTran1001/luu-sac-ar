@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# Express build output
+dist/
+build/
+
+# Environment variables (Bảo mật - Quan trọng)
+.env
+.env.local
+.env.development.local
+
+# Prisma
+/apps/api/prisma/migrations/
+/apps/api/prisma/*.db
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*

@@ -1,0 +1,15 @@
+node_modules/
+
+dist/
+build/
+out/
+
+.eslintrc.js
+prettier.config.js
+
+prisma/
+
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
