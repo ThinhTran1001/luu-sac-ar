@@ -1,15 +1,18 @@
-// apps/api/prisma.config.ts
 import 'dotenv/config';
-import { defineConfig } from '@prisma/config';
-import path from 'path';
+import { defineConfig, env } from 'prisma/config';
 
 export default defineConfig({
-  schema: path.resolve(__dirname, './prisma/schema.prisma'),
+  // the main entry for your schema
+  schema: 'prisma/schema.prisma',
+  // where migrations should be generated
+  // what script to run for "prisma db seed"
   migrations: {
-    path: path.resolve(__dirname, './prisma/migrations'),
+    path: 'prisma/migrations',
   },
-  engine: 'classic',
+  // The database URL
   datasource: {
-    url: process.env.DATABASE_URL as string,
+    // Type Safe env() helper
+    // Does not replace the need for dotenv
+    url: env('DATABASE_URL'),
   },
 });
