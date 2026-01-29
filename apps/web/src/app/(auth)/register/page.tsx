@@ -9,7 +9,10 @@ export default function RegisterPage() {
         <RegisterForm />
         <div className="mt-4 text-center">
           <p className="text-sm">
-            Already have an account? <a href={ROUTES.AUTH.LOGIN} className="text-blue-500">Sign In</a>
+            Already have an account?{' '}
+            <a href={ROUTES.AUTH.LOGIN} className="text-blue-500">
+              Sign In
+            </a>
           </p>
         </div>
       </div>

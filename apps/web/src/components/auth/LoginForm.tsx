@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuth } from '../../context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '../../constants/routes';
-import { loginSchema, LoginFormValues } from '../../lib/schemas/auth';
+import { LoginSchema, LoginDto } from '@luu-sac/shared';
 
 export function LoginForm() {
   const { login } = useAuth();
@@ -17,16 +17,20 @@ export function LoginForm() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<LoginDto>({
+    resolver: zodResolver(LoginSchema),
   });
 
-  const onSubmit = async (data: LoginFormValues) => {
+  const onSubmit = async (data: LoginDto) => {
     try {
       await login(data);
       router.push(ROUTES.HOME);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unexpected error occurred');
+      }
     }
   };
 
@@ -54,7 +58,9 @@ export function LoginForm() {
             }`}
             {...register('password')}
           />
-          {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>}
+          {errors.password && (
+            <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
+          )}
         </div>
         <button
           type="submit"

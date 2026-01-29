@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuth } from '../../context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '../../constants/routes';
-import { registerSchema, RegisterFormValues } from '../../lib/schemas/auth';
+import { RegisterSchema, RegisterDto } from '@luu-sac/shared';
 
 export function RegisterForm() {
   const { register: registerAuth } = useAuth();
@@ -17,16 +17,20 @@ export function RegisterForm() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<RegisterFormValues>({
-    resolver: zodResolver(registerSchema),
+  } = useForm<RegisterDto>({
+    resolver: zodResolver(RegisterSchema),
   });
 
-  const onSubmit = async (data: RegisterFormValues) => {
+  const onSubmit = async (data: RegisterDto) => {
     try {
       await registerAuth(data);
       router.push(ROUTES.HOME);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unexpected error occurred');
+      }
     }
   };
 
@@ -65,7 +69,9 @@ export function RegisterForm() {
             }`}
             {...register('password')}
           />
-          {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>}
+          {errors.password && (
+            <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
+          )}
         </div>
         <button
           type="submit"

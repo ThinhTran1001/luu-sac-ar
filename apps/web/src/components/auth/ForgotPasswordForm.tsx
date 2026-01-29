@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { authService } from '../../services/auth.service';
-import { forgotPasswordSchema, ForgotPasswordFormValues } from '../../lib/schemas/auth';
+import { ForgotPasswordSchema, ForgotPasswordDto } from '@luu-sac/shared';
 
 export function ForgotPasswordForm() {
   const [message, setMessage] = useState('');
@@ -14,18 +14,22 @@ export function ForgotPasswordForm() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<ForgotPasswordFormValues>({
-    resolver: zodResolver(forgotPasswordSchema),
+  } = useForm<ForgotPasswordDto>({
+    resolver: zodResolver(ForgotPasswordSchema),
   });
 
-  const onSubmit = async (data: ForgotPasswordFormValues) => {
+  const onSubmit = async (data: ForgotPasswordDto) => {
     try {
       await authService.forgotPassword(data.email);
 
       setMessage('Check your email for reset instructions.');
       setError('');
-    } catch (err: any) {
-      setError(err.message || 'Failed to send reset email');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Failed to send reset email');
+      }
       setMessage('');
     }
   };

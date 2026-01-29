@@ -9,7 +9,9 @@ export default function ForgotPasswordPage() {
         <ForgotPasswordForm />
         <div className="mt-4 text-center">
           <p className="text-sm">
-            <a href={ROUTES.AUTH.LOGIN} className="text-blue-500">Back to Login</a>
+            <a href={ROUTES.AUTH.LOGIN} className="text-blue-500">
+              Back to Login
+            </a>
           </p>
         </div>
       </div>

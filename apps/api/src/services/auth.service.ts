@@ -1,6 +1,6 @@
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
-import { RegisterDto, LoginDto } from '@luu-sac/shared';
+import { RegisterDto, LoginDto, ResetPasswordDto } from '@luu-sac/shared';
 import { PrismaClient } from '@prisma/client';
 import { User } from 'src/generated/prisma/client';
 import { MESSAGES } from '../constants/messages';
@@ -117,7 +117,7 @@ export class AuthService {
     return { message: MESSAGES.AUTH.RESET_EMAIL_SENT };
   }
 
-  async resetPassword(dto: any) {
+  async resetPassword(dto: ResetPasswordDto) {
     const user = await prisma.user.findFirst({
       where: {
         resetPasswordToken: dto.token,

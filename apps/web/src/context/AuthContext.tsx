@@ -1,11 +1,11 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { LoginDto, RegisterDto, AuthResponseDto } from '@luu-sac/shared';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { LoginDto, RegisterDto, UserDto } from '@luu-sac/shared';
 import { authService } from '../services/auth.service';
 
 interface AuthContextType {
-  user: any | null;
+  user: UserDto | null;
   token: string | null;
   login: (dto: LoginDto) => Promise<void>;
   register: (dto: RegisterDto) => Promise<void>;
@@ -15,8 +15,8 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<any | null>(null);
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<UserDto | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,36 +25,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const storedUser = localStorage.getItem('user');
     if (storedToken && storedUser) {
       setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+      setUser(JSON.parse(storedUser) as UserDto);
     }
     setIsLoading(false);
   }, []);
 
-  const login = async (dto: LoginDto) => {
-    try {
-      const data = await authService.login(dto);
-      setToken(data.token);
-      setUser(data.user);
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-    } catch (error: any) {
-      throw new Error(error.response?.data?.message || 'Login failed');
-    }
+  const login = async (dto: LoginDto): Promise<void> => {
+    // Error handling is done in the API interceptor which extracts message from ApiResponse
+    const data = await authService.login(dto);
+    setToken(data.token);
+    setUser(data.user);
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user));
   };
 
-  const register = async (dto: RegisterDto) => {
-    try {
-      const data = await authService.register(dto);
-      setToken(data.token);
-      setUser(data.user);
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-    } catch (error: any) {
-      throw new Error(error.response?.data?.message || 'Registration failed');
-    }
+  const register = async (dto: RegisterDto): Promise<void> => {
+    // Error handling is done in the API interceptor which extracts message from ApiResponse
+    const data = await authService.register(dto);
+    setToken(data.token);
+    setUser(data.user);
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user));
   };
 
-  const logout = () => {
+  const logout = (): void => {
     setToken(null);
     setUser(null);
     localStorage.removeItem('token');
@@ -68,7 +62,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 };
 
-export const useAuth = () => {
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');

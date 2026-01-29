@@ -9,10 +9,15 @@ export default function LoginPage() {
         <LoginForm />
         <div className="mt-4 text-center">
           <p className="text-sm">
-            Don't have an account? <a href={ROUTES.AUTH.REGISTER} className="text-blue-500">Sign Up</a>
+            Don't have an account?{' '}
+            <a href={ROUTES.AUTH.REGISTER} className="text-blue-500">
+              Sign Up
+            </a>
           </p>
           <p className="text-sm mt-2">
-            <a href={ROUTES.AUTH.FORGOT_PASSWORD} className="text-blue-500">Forgot Password?</a>
+            <a href={ROUTES.AUTH.FORGOT_PASSWORD} className="text-blue-500">
+              Forgot Password?
+            </a>
           </p>
         </div>
       </div>

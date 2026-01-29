@@ -10,5 +10,7 @@ export const MESSAGES = {
     RESET_EMAIL_SENT: 'Reset email sent',
     INVALID_OR_EXPIRED_TOKEN: 'Invalid or expired token',
     PASSWORD_RESET_SUCCESSFUL: 'Password reset successful',
+    LOGIN_SUCCESS: 'Login successful',
+    REGISTER_SUCCESS: 'Registration successful',
   },
 };
