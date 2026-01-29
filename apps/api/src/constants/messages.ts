@@ -13,4 +13,7 @@ export const MESSAGES = {
     LOGIN_SUCCESS: 'Login successful',
     REGISTER_SUCCESS: 'Registration successful',
   },
+  ERROR: {
+    DEFAULT: 'Something went wrong',
+  },
 };
