@@ -9,12 +9,24 @@ trigger: always_on
 ### No `any` Policy
 
 ```typescript
-// ❌ Bad
+// ❌ Bad - Avoid using any or unknown when specific types can be defined
 function process(data: any) { ... }
 
-// ✅ Good - Use unknown with type narrowing
-function process(data: unknown) {
-  if (typeof data === 'object' && data !== null) { ... }
+// ✅ Good - Reuse existing Interfaces/DTOs
+import { LoginDto } from '@luu-sac/shared';
+
+function process(data: LoginDto) {
+  console.log(data.email);
+}
+
+// ✅ Good - Create new Interfaces if one doesn't exist (create (if need) or reusing (if possible))
+interface ProcessResult {
+  status: 'success' | 'failed';
+  timestamp: number;
+}
+
+function getResult(): ProcessResult {
+  return { status: 'success', timestamp: Date.now() };
 }
 ```
 
@@ -101,6 +113,58 @@ export function LoginForm() {
       {errors.email && <span>{errors.email.message}</span>}
     </form>
   );
+}
+```
+
+---
+
+## Backend Patterns
+
+### Controller Pattern
+
+Controllers should handle HTTP concerns only (req/res, status codes) and delegate logic to services.
+
+```typescript
+// apps/api/src/controllers/auth.controller.ts
+import { Request, Response } from "express";
+import { sendSuccess, sendError } from "../utils/response";
+import { MESSAGES } from "../constants/messages";
+import { AuthService } from "../services/auth.service";
+
+export class AuthController {
+  static async login(req: Request, res: Response): Promise<void> {
+    try {
+      const result = await AuthService.login(req.body);
+      sendSuccess(res, result, MESSAGES.AUTH.LOGIN_SUCCESS);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Unknown error";
+      sendError(res, message, 401);
+    }
+  }
+}
+```
+
+### Service Pattern
+
+Services contain business logic and database interactions. They should return pure data or throw errors.
+
+```typescript
+// apps/api/src/services/auth.service.ts
+import { LoginDto, AuthResponseDto } from "@luu-sac/shared";
+import { MESSAGES } from "../constants/messages";
+
+export class AuthService {
+  static async login(dto: LoginDto): Promise<AuthResponseDto> {
+    const user = await prisma.user.findUnique({ where: { email: dto.email } });
+
+    if (!user) {
+      throw new Error(MESSAGES.AUTH.INVALID_CREDENTIALS);
+    }
+
+    // ... validation logic
+
+    return { token, user };
+  }
 }
 ```
 
