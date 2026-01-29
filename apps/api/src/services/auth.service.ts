@@ -1,11 +1,9 @@
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
 import { RegisterDto, LoginDto, ResetPasswordDto } from '@luu-sac/shared';
-import { PrismaClient } from '@prisma/client';
-import { User } from 'src/generated/prisma/client';
+import { User } from '@prisma/client';
 import { MESSAGES } from '../constants/messages';
-
-const prisma = new PrismaClient();
+import prisma from '../utils/prisma';
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecret';
 
 export class AuthService {
