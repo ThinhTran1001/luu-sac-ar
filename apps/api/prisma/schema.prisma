@@ -14,16 +14,20 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(uuid())
-  email         String         @unique
-  password      String
-  name          String
-  role          Role           @default(USER)
-  companyInfo   Company? // Phục vụ tính năng Company Information
-  orders        Order[]
-  customDesigns CustomDesign[] // Lưu các bản thiết kế AR của khách
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  id                   String         @id @default(uuid())
+  email                String         @unique
+  password             String?
+  name                 String
+  avatar               String?
+  googleId             String?        @unique
+  resetPasswordToken   String?
+  resetPasswordExpires DateTime?
+  role                 Role           @default(USER)
+  companyInfo          Company?
+  orders               Order[]
+  customDesigns        CustomDesign[]
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
 }
 
 model Company {
