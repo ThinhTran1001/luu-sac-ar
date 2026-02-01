@@ -1,8 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import authRoutes from './routes/auth.routes';
-import { API_ROUTES } from '@luu-sac/shared';
+import routes from './routes';
 import { globalErrorHandler } from './middlewares/error.middleware';
 import { logger } from './utils/logger';
 import httpLogger from './middlewares/logger.middleware';
@@ -23,7 +22,7 @@ app.get('/', (req, res) => {
   res.send('Luu Sac API is running');
 });
 
-app.use(API_ROUTES.AUTH.BASE, authRoutes);
+app.use('/api', routes);
 
 // Global Error Handler
 app.use(globalErrorHandler);
