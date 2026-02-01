@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,6 +17,12 @@ import Link from 'next/link';
 
 export function AdminHeader() {
   const { user, logout } = useAuth();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/login');
+  };
 
   return (
     <header className="h-16 border-b bg-white px-8 flex items-center justify-between sticky top-0 z-30 shadow-sm">
@@ -70,7 +77,7 @@ export function AdminHeader() {
               <User className="mr-2 h-4 w-4" /> Profile settings
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={logout}
+              onClick={handleLogout}
               className="text-red-600 focus:text-red-600 focus:bg-red-50"
             >
               <LogOut className="mr-2 h-4 w-4" /> Log out

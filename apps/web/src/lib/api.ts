@@ -13,17 +13,14 @@ export const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true, // IMPORTANT: Include cookies in requests
 });
 
-// Request interceptor - Add auth token
+// Request interceptor - Token is automatically sent via cookie
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('token');
-      if (token && config.headers) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-    }
+    // No need to manually add Authorization header
+    // Token is automatically included via HTTP-only cookie
     return config;
   },
   (error: AxiosError) => Promise.reject(error),

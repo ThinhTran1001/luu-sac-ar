@@ -6,10 +6,9 @@ import { authService } from '../services/auth.service';
 
 interface AuthContextType {
   user: UserDto | null;
-  token: string | null;
   login: (dto: LoginDto) => Promise<UserDto>;
   register: (dto: RegisterDto) => Promise<UserDto>;
-  logout: () => void;
+  logout: () => Promise<void>;
   isLoading: boolean;
 }
 
@@ -17,14 +16,11 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<UserDto | null>(null);
-  const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
     const storedUser = localStorage.getItem('user');
-    if (storedToken && storedUser) {
-      setToken(storedToken);
+    if (storedUser) {
       setUser(JSON.parse(storedUser) as UserDto);
     }
     setIsLoading(false);
@@ -32,32 +28,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const login = async (dto: LoginDto): Promise<UserDto> => {
     const data = await authService.login(dto);
-    setToken(data.token);
     setUser(data.user);
-    localStorage.setItem('token', data.token);
     localStorage.setItem('user', JSON.stringify(data.user));
     return data.user;
   };
 
   const register = async (dto: RegisterDto): Promise<UserDto> => {
     const data = await authService.register(dto);
-    setToken(data.token);
     setUser(data.user);
-    localStorage.setItem('token', data.token);
     localStorage.setItem('user', JSON.stringify(data.user));
     return data.user;
   };
 
 
-  const logout = (): void => {
-    setToken(null);
+  const logout = async (): Promise<void> => {
+    await authService.logout();
     setUser(null);
-    localStorage.removeItem('token');
     localStorage.removeItem('user');
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, login, register, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { ROUTES } from '@/constants/routes';
 import { Button } from '@/components/ui/button';
@@ -17,6 +18,12 @@ import { ShoppingBag, User, LogOut, Settings, Menu } from 'lucide-react';
 
 export function UserHeader() {
   const { user, logout } = useAuth();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push(ROUTES.AUTH.LOGIN);
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md">
@@ -92,7 +99,7 @@ export function UserHeader() {
                 )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  onClick={logout}
+                  onClick={handleLogout}
                   className="text-destructive focus:text-destructive"
                 >
                   <LogOut className="mr-2 h-4 w-4" />

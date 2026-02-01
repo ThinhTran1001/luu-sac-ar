@@ -12,6 +12,7 @@ export const MESSAGES = {
     PASSWORD_RESET_SUCCESSFUL: 'Password reset successful',
     LOGIN_SUCCESS: 'Login successful',
     REGISTER_SUCCESS: 'Registration successful',
+    LOGOUT_SUCCESS: 'Logout successful',
   },
   PRODUCT: {
     CREATED_SUCCESS: 'Product created successfully',

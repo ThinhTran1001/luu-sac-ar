@@ -46,4 +46,8 @@ export const authService = {
       dto,
     );
   },
+
+  logout: async (): Promise<void> => {
+    await api.post(`${API_ROUTES.AUTH.BASE}${API_ROUTES.AUTH.LOGOUT}`);
+  },
 };

@@ -9,5 +9,6 @@ router.post(API_ROUTES.AUTH.LOGIN, AuthController.login);
 router.post(API_ROUTES.AUTH.GOOGLE, AuthController.googleLogin);
 router.post(API_ROUTES.AUTH.FORGOT_PASSWORD, AuthController.forgotPassword);
 router.post(API_ROUTES.AUTH.RESET_PASSWORD, AuthController.resetPassword);
+router.post(API_ROUTES.AUTH.LOGOUT, AuthController.logout);
 
 export default router;

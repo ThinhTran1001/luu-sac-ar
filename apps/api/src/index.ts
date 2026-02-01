@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import routes from './routes';
 import { globalErrorHandler } from './middlewares/error.middleware';
 import { logger } from './utils/logger';
@@ -16,6 +17,7 @@ app.use(
   }),
 );
 app.use(express.json());
+app.use(cookieParser());
 app.use(httpLogger);
 
 app.get('/', (req, res) => {

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { VerifyErrors, JwtPayload } from 'jsonwebtoken';
 import { MESSAGES } from '../constants/messages';
+import { COOKIE_CONFIG } from '../constants/cookie';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecret';
 
@@ -15,8 +16,8 @@ export interface AuthRequest extends Request {
 }
 
 export const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  // Read token from cookie instead of Authorization header
+  const token = req.cookies[COOKIE_CONFIG.ACCESS_TOKEN_NAME];
 
   if (!token) {
     return res.status(401).json({ message: MESSAGES.AUTH.ACCESS_TOKEN_REQUIRED });
