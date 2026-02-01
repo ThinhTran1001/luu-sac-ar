@@ -13,6 +13,22 @@ export const MESSAGES = {
     LOGIN_SUCCESS: 'Login successful',
     REGISTER_SUCCESS: 'Registration successful',
   },
+  PRODUCT: {
+    CREATED_SUCCESS: 'Product created successfully',
+    RETRIEVED_SUCCESS: 'Product retrieved successfully',
+    UPDATED_SUCCESS: 'Product updated successfully',
+    DELETED_SUCCESS: 'Product deleted successfully',
+    NOT_FOUND: 'Product not found',
+    LIST_RETRIEVED_SUCCESS: 'Products retrieved successfully',
+  },
+  CATEGORY: {
+    CREATED_SUCCESS: 'Category created successfully',
+    RETRIEVED_SUCCESS: 'Category retrieved successfully',
+    UPDATED_SUCCESS: 'Category updated successfully',
+    DELETED_SUCCESS: 'Category deleted successfully',
+    NOT_FOUND: 'Category not found',
+    LIST_RETRIEVED_SUCCESS: 'Categories retrieved successfully',
+  },
   ERROR: {
     DEFAULT: 'Something went wrong',
   },
