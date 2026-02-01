@@ -4,6 +4,7 @@ import ProductForm from '@/components/admin/ProductForm';
 import { productService } from '@/services/product.service';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function CreateProductPage() {
   const router = useRouter();
@@ -11,20 +12,27 @@ export default function CreateProductPage() {
 
   const handleSubmit = async (formData: FormData) => {
     setIsSubmitting(true);
-    try {
-      await productService.create(formData);
-      router.push('/admin/products');
-    } catch (error) {
-      console.error('Create product failed', error);
-      alert('Failed to create product');
-    } finally {
-      setIsSubmitting(false);
-    }
+    const promise = productService.create(formData);
+
+    toast.promise(promise, {
+      loading: 'Creating product...',
+      success: () => {
+        router.push('/admin/products');
+        return 'Product created successfully';
+      },
+      error: 'Failed to create product',
+      finally: () => setIsSubmitting(false),
+    });
   };
 
   return (
-    <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow">
-      <h1 className="text-2xl font-bold mb-6">Add New Product</h1>
+    <div className="max-w-5xl mx-auto space-y-6">
+      <div className="space-y-0.5">
+        <h1 className="text-3xl font-bold tracking-tight">Add New Product</h1>
+        <p className="text-muted-foreground">
+          Fill in the information below to create a new ceramic product.
+        </p>
+      </div>
       <ProductForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
     </div>
   );

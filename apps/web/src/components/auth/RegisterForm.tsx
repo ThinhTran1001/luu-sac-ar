@@ -1,17 +1,28 @@
 'use client';
 
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuth } from '../../context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '../../constants/routes';
 import { RegisterSchema, RegisterDto } from '@luu-sac/shared';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { toast } from 'sonner';
+import Link from 'next/link';
 
 export function RegisterForm() {
   const { register: registerAuth } = useAuth();
   const router = useRouter();
-  const [error, setError] = useState('');
 
   const {
     register,
@@ -24,63 +35,72 @@ export function RegisterForm() {
   const onSubmit = async (data: RegisterDto) => {
     try {
       await registerAuth(data);
+      toast.success('Account created successfully');
       router.push(ROUTES.HOME);
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('An unexpected error occurred');
-      }
+      const message = err instanceof Error ? err.message : 'An unexpected error occurred';
+      toast.error(message);
     }
   };
 
   return (
-    <>
-      {error && <div className="mb-4 text-red-500">{error}</div>}
+    <Card className="w-full max-w-md mx-auto">
+      <CardHeader className="space-y-1">
+        <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
+        <CardDescription>Enter your information below to create your account</CardDescription>
+      </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-4">
-          <label className="mb-2 block text-sm font-bold text-gray-700">Name</label>
-          <input
-            type="text"
-            className={`w-full rounded border px-3 py-2 outline-none focus:border-blue-500 ${
-              errors.name ? 'border-red-500' : ''
-            }`}
-            {...register('name')}
-          />
-          {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>}
-        </div>
-        <div className="mb-4">
-          <label className="mb-2 block text-sm font-bold text-gray-700">Email</label>
-          <input
-            type="email"
-            className={`w-full rounded border px-3 py-2 outline-none focus:border-blue-500 ${
-              errors.email ? 'border-red-500' : ''
-            }`}
-            {...register('email')}
-          />
-          {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
-        </div>
-        <div className="mb-6">
-          <label className="mb-2 block text-sm font-bold text-gray-700">Password</label>
-          <input
-            type="password"
-            className={`w-full rounded border px-3 py-2 outline-none focus:border-blue-500 ${
-              errors.password ? 'border-red-500' : ''
-            }`}
-            {...register('password')}
-          />
-          {errors.password && (
-            <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
-          )}
-        </div>
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-600 disabled:opacity-50"
-        >
-          {isSubmitting ? 'Signing Up...' : 'Sign Up'}
-        </button>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="name">Full Name</Label>
+            <Input
+              id="name"
+              placeholder="John Doe"
+              {...register('name')}
+              className={errors.name ? 'border-destructive' : ''}
+            />
+            {errors.name && (
+              <p className="text-sm font-medium text-destructive">{errors.name.message}</p>
+            )}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="name@example.com"
+              {...register('email')}
+              className={errors.email ? 'border-destructive' : ''}
+            />
+            {errors.email && (
+              <p className="text-sm font-medium text-destructive">{errors.email.message}</p>
+            )}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              {...register('password')}
+              className={errors.password ? 'border-destructive' : ''}
+            />
+            {errors.password && (
+              <p className="text-sm font-medium text-destructive">{errors.password.message}</p>
+            )}
+          </div>
+        </CardContent>
+        <CardFooter className="flex flex-col space-y-4">
+          <Button type="submit" className="w-full" disabled={isSubmitting}>
+            {isSubmitting ? 'Creating account...' : 'Create account'}
+          </Button>
+          <div className="text-center text-sm text-muted-foreground">
+            Already have an account?{' '}
+            <Link href="/auth/login" className="font-medium text-primary hover:underline">
+              Sign in
+            </Link>
+          </div>
+        </CardFooter>
       </form>
-    </>
+    </Card>
   );
 }

@@ -6,16 +6,25 @@ import { CreateProductSchema, CreateProductDto, CategoryDto, ProductDto } from '
 import { useEffect, useState } from 'react';
 import { categoryService } from '@/services/category.service';
 import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Loader2, Upload, X } from 'lucide-react';
 
 interface ProductFormProps {
   initialData?: Partial<ProductDto>;
   onSubmit: (data: FormData) => Promise<void>;
   isSubmitting: boolean;
 }
-
-// Separate schema for form validation if needed,
-// but since we handle files manually, we'll relax the schema or skip client-side file validation for now
-// and rely on server or simple required checks.
 
 export default function ProductForm({ initialData, onSubmit, isSubmitting }: ProductFormProps) {
   const [categories, setCategories] = useState<CategoryDto[]>([]);
@@ -33,6 +42,9 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
 
   const {
     register,
+    handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<CreateProductDto>({
     // @ts-ignore: Mismatch between file input (FileList) and Schema (URL string)
@@ -47,11 +59,14 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
     },
   });
 
+  const categoryId = watch('categoryId');
+  const status = watch('status');
+
   useEffect(() => {
     categoryService.findAll().then(setCategories).catch(console.error);
   }, []);
 
-  // Cleanup object URLs to avoid memory leaks
+  // Cleanup object URLs
   useEffect(() => {
     return () => {
       [mainImagePreview, thumbnailPreview, ...galleryPreviews].forEach((url) => {
@@ -89,174 +104,99 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
   };
 
   return (
-    <form onSubmit={onNativeSubmit} className="space-y-8">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Left Column: Product Details */}
-        <div className="space-y-6">
-          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Basic Information</h3>
-
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Product Name</label>
-                <input
+    <form onSubmit={onNativeSubmit} className="space-y-8 pb-10">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left Columns: Product Details */}
+        <div className="lg:col-span-2 space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Basic Information</CardTitle>
+              <CardDescription>Enter the primary details for your ceramic product.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Product Name</Label>
+                <Input
+                  id="name"
                   {...register('name')}
-                  required
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2"
+                  placeholder="e.g. Blue Phoenix Vase"
+                  className={errors.name ? 'border-destructive' : ''}
                 />
-                {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+                {errors.name && (
+                  <p className="text-sm font-medium text-destructive">{errors.name.message}</p>
+                )}
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Description</label>
-                <textarea
+              <div className="space-y-2">
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  id="description"
                   {...register('description')}
-                  required
-                  rows={4}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2"
+                  placeholder="Describe the product's history, material, and design..."
+                  rows={6}
                 />
+                {errors.description && (
+                  <p className="text-sm font-medium text-destructive">
+                    {errors.description.message}
+                  </p>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Price ($)</label>
-                  <input
-                    {...register('price')}
-                    type="number"
-                    required
-                    min="0"
-                    step="0.01"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2"
-                  />
+                <div className="space-y-2">
+                  <Label htmlFor="price">Price ($)</Label>
+                  <Input id="price" {...register('price')} type="number" min="0" step="0.01" />
+                  {errors.price && (
+                    <p className="text-sm font-medium text-destructive">{errors.price.message}</p>
+                  )}
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Quantity</label>
-                  <input
-                    {...register('quantity')}
-                    type="number"
-                    required
-                    min="0"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Category</label>
-                <select
-                  {...register('categoryId')}
-                  required
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2"
-                >
-                  <option value="">Select a Category</option>
-                  {categories.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Status</label>
-                <select
-                  {...register('status')}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2"
-                >
-                  <option value="ACTIVE">Active</option>
-                  <option value="HIDE">Hide</option>
-                  <option value="DELETED">Deleted</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Column: Media */}
-        <div className="space-y-6">
-          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Product Images</h3>
-
-            <div className="space-y-6">
-              {/* Main Image */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Main Image</label>
-                <div className="flex items-start space-x-4">
-                  <div className="flex-1">
-                    <input
-                      type="file"
-                      name="imageUrl"
-                      accept="image/*"
-                      onChange={(e) => handleFileChange(e, setMainImagePreview)}
-                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                    />
-                    <p className="mt-1 text-xs text-gray-500">
-                      Required. Displays on product card.
+                <div className="space-y-2">
+                  <Label htmlFor="quantity">Quantity</Label>
+                  <Input id="quantity" {...register('quantity')} type="number" min="0" />
+                  {errors.quantity && (
+                    <p className="text-sm font-medium text-destructive">
+                      {errors.quantity.message}
                     </p>
-                  </div>
-                  {mainImagePreview && (
-                    <div className="relative w-24 h-24 border rounded-lg overflow-hidden bg-white">
-                      <Image
-                        src={mainImagePreview}
-                        alt="Main Preview"
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
                   )}
                 </div>
               </div>
+            </CardContent>
+          </Card>
 
-              {/* Thumbnail Image */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Thumbnail</label>
-                <div className="flex items-start space-x-4">
-                  <div className="flex-1">
-                    <input
-                      type="file"
-                      name="thumbnailImage"
-                      accept="image/*"
-                      onChange={(e) => handleFileChange(e, setThumbnailPreview)}
-                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                    />
-                    <p className="mt-1 text-xs text-gray-500">
-                      Optional. Smaller version for lists.
-                    </p>
-                  </div>
-                  {thumbnailPreview && (
-                    <div className="relative w-24 h-24 border rounded-lg overflow-hidden bg-white">
-                      <Image
-                        src={thumbnailPreview}
-                        alt="Thumbnail Preview"
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  )}
+          <Card>
+            <CardHeader>
+              <CardTitle>Gallery Images</CardTitle>
+              <CardDescription>
+                Select additional high-resolution images for the gallery.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 gap-4">
+                <div
+                  className="border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center hover:bg-accent/50 transition-colors cursor-pointer relative"
+                  onClick={() => document.getElementById('galleryImages')?.click()}
+                >
+                  <Upload className="h-10 w-10 text-muted-foreground mb-2" />
+                  <p className="text-sm text-muted-foreground font-medium">
+                    Click to upload gallery images
+                  </p>
+                  <Input
+                    id="galleryImages"
+                    type="file"
+                    name="galleryImages"
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                    onChange={handleGalleryChange}
+                  />
                 </div>
-              </div>
-
-              {/* Gallery Images */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Gallery Images
-                </label>
-                <input
-                  type="file"
-                  name="galleryImages"
-                  accept="image/*"
-                  multiple
-                  onChange={handleGalleryChange}
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                />
-                <p className="mt-1 text-xs text-gray-500">Select multiple images.</p>
 
                 {galleryPreviews.length > 0 && (
-                  <div className="mt-4 grid grid-cols-4 gap-2">
+                  <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                     {galleryPreviews.map((url, index) => (
                       <div
                         key={index}
-                        className="relative w-full h-20 border rounded-lg overflow-hidden bg-white"
+                        className="relative aspect-square rounded-md overflow-hidden border"
                       >
                         <Image src={url} alt={`Gallery ${index}`} fill className="object-cover" />
                       </div>
@@ -264,52 +204,169 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
                   </div>
                 )}
               </div>
-            </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Right Column: Organization & Featured Images */}
+        <div className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Organization</CardTitle>
+              <CardDescription>Set product status and category.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>Category</Label>
+                <Select value={categoryId} onValueChange={(val) => setValue('categoryId', val)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((c) => (
+                      <SelectItem key={c.id} value={c.id}>
+                        {c.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <input type="hidden" {...register('categoryId')} />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Status</Label>
+                <Select value={status} onValueChange={(val: any) => setValue('status', val)}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ACTIVE">Active</SelectItem>
+                    <SelectItem value="HIDE">Hide</SelectItem>
+                    <SelectItem value="DELETED">Deleted</SelectItem>
+                  </SelectContent>
+                </Select>
+                <input type="hidden" {...register('status')} />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Product Images</CardTitle>
+              <CardDescription>Main image and thumbnail used in listings.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label>Main Image</Label>
+                <div className="relative aspect-video rounded-lg border-2 border-dashed flex flex-col items-center justify-center overflow-hidden bg-accent/20 group hover:border-primary/50 transition-colors">
+                  {mainImagePreview ? (
+                    <>
+                      <Image
+                        src={mainImagePreview}
+                        alt="Main Preview"
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => document.getElementById('imageUrl')?.click()}
+                        >
+                          Change Image
+                        </Button>
+                      </div>
+                    </>
+                  ) : (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      className="h-full w-full flex-col space-y-2"
+                      onClick={() => document.getElementById('imageUrl')?.click()}
+                    >
+                      <Upload className="h-8 w-8 text-muted-foreground" />
+                      <span className="text-muted-foreground">Upload Main Image</span>
+                    </Button>
+                  )}
+                  <Input
+                    id="imageUrl"
+                    type="file"
+                    name="imageUrl"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => handleFileChange(e, setMainImagePreview)}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Thumbnail Image</Label>
+                <div className="relative h-32 w-32 mx-auto rounded-lg border-2 border-dashed flex flex-col items-center justify-center overflow-hidden bg-accent/20 group hover:border-primary/50 transition-colors">
+                  {thumbnailPreview ? (
+                    <>
+                      <Image
+                        src={thumbnailPreview}
+                        alt="Thumbnail Preview"
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          size="xs"
+                          onClick={() => document.getElementById('thumbnailImage')?.click()}
+                        >
+                          Change
+                        </Button>
+                      </div>
+                    </>
+                  ) : (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      className="h-full w-full flex-col space-y-1"
+                      onClick={() => document.getElementById('thumbnailImage')?.click()}
+                    >
+                      <Upload className="h-6 w-6 text-muted-foreground" />
+                      <span className="text-xs text-muted-foreground">Thumbnail</span>
+                    </Button>
+                  )}
+                  <Input
+                    id="thumbnailImage"
+                    type="file"
+                    name="thumbnailImage"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => handleFileChange(e, setThumbnailPreview)}
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="flex flex-col gap-2">
+            <Button type="submit" size="lg" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving Product...
+                </>
+              ) : (
+                'Save Product'
+              )}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => window.history.back()}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </Button>
           </div>
         </div>
-      </div>
-
-      <div className="flex justify-end pt-5 border-t border-gray-200">
-        <button
-          type="button"
-          onClick={() => window.history.back()}
-          className="mr-3 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isSubmitting ? (
-            <span className="flex items-center">
-              <svg
-                className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              Saving...
-            </span>
-          ) : (
-            'Save Product'
-          )}
-        </button>
       </div>
     </form>
   );

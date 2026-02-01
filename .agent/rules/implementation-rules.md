@@ -33,6 +33,7 @@ trigger: always_on
 4. **Import schemas from `@luu-sac/shared`**
 5. **Use `authService`/services for API calls** (not direct fetch)
 6. **Use route constants** for navigation
+7. **Always use shadcn/ui components** for UI elements (Button, Input, Table, etc.) to ensure aesthetic consistency.
 
 ---
 

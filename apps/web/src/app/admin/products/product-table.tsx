@@ -3,13 +3,17 @@
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { DataTable } from '@/components/common/DataTable';
-import { columns } from './columns';
+import { getProductColumns } from './columns';
 import { useProducts } from '@/hooks/useProducts';
 import { PaginationState } from '@tanstack/react-table';
+import { toast } from 'sonner';
+import { productService } from '@/services/product.service';
+import { useQueryClient } from '@tanstack/react-query';
 
 export function ProductTable() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
 
   const page = Number(searchParams.get('page')) || 1;
   const limit = Number(searchParams.get('limit')) || 10;
@@ -19,10 +23,12 @@ export function ProductTable() {
     pageSize: limit,
   });
 
-  const { data, isLoading, error } = useProducts({
+  const query = {
     page: pagination.pageIndex + 1,
     limit: pagination.pageSize,
-  });
+  };
+
+  const { data, isLoading, error } = useProducts(query);
 
   const handlePaginationChange = (
     updaterOrValue: PaginationState | ((old: PaginationState) => PaginationState),
@@ -36,6 +42,25 @@ export function ProductTable() {
     params.set('limit', String(newPagination.pageSize));
     router.push(`?${params.toString()}`);
   };
+
+  const handleDelete = async (id: string) => {
+    const promise = productService.delete(id);
+
+    toast.promise(promise, {
+      loading: 'Deleting product...',
+      success: () => {
+        queryClient.invalidateQueries({ queryKey: ['products'] });
+        return 'Product deleted successfully';
+      },
+      error: 'Failed to delete product',
+    });
+  };
+
+  const handleEdit = (id: string) => {
+    router.push(`/admin/products/${id}/edit`);
+  };
+
+  const columns = getProductColumns({ onDelete: handleDelete, onEdit: handleEdit });
 
   if (isLoading) {
     return <div className="text-center py-8">Loading products...</div>;
