@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { DataTable } from '@/components/ui/DataTable';
+import { DataTable } from '@/components/common/DataTable';
 import { columns } from './columns';
 import { useProducts } from '@/hooks/useProducts';
 import { PaginationState } from '@tanstack/react-table';

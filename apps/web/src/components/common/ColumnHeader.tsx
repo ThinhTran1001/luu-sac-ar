@@ -1,8 +1,9 @@
 'use client';
 
 import { Column } from '@tanstack/react-table';
-import { ArrowUpDown, ArrowUp, ArrowDown, EyeOff } from 'lucide-react';
+import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 interface ColumnHeaderProps<TData, TValue> extends React.HTMLAttributes<HTMLDivElement> {
   column: Column<TData, TValue>;
@@ -20,8 +21,10 @@ export function ColumnHeader<TData, TValue>({
 
   return (
     <div className={cn('flex items-center space-x-2', className)}>
-      <button
-        className="flex items-center space-x-1 hover:text-gray-900"
+      <Button
+        variant="ghost"
+        size="sm"
+        className="-ml-3 h-8 data-[state=open]:bg-accent"
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
         <span>{title}</span>
@@ -32,7 +35,7 @@ export function ColumnHeader<TData, TValue>({
         ) : (
           <ArrowUpDown className="ml-2 h-4 w-4" />
         )}
-      </button>
+      </Button>
     </div>
   );
 }

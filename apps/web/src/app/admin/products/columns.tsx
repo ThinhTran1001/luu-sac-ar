@@ -2,7 +2,7 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 import { ProductDto } from '@luu-sac/shared';
-import { ColumnHeader } from '@/components/ui/ColumnHeader';
+import { ColumnHeader } from '@/components/common/ColumnHeader';
 import Image from 'next/image';
 
 export const columns: ColumnDef<ProductDto>[] = [
