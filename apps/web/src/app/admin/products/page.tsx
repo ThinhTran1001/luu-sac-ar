@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ProductTable } from './product-table';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { productService } from '@/services/product.service';
+import { ROUTES } from '@/constants/routes';
 
 interface PageProps {
   searchParams: Promise<{ page?: string; limit?: string }>;
@@ -26,7 +27,7 @@ export default async function ProductListPage({ searchParams }: PageProps) {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Products</h1>
         <Link
-          href="/admin/products/create"
+          href={ROUTES.ADMIN.PRODUCTS.CREATE}
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
           Add Product

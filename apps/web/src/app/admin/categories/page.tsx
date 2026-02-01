@@ -9,6 +9,7 @@ import { getCategoryColumns } from './columns';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
+import { ROUTES } from '@/constants/routes';
 
 export default function CategoryListPage() {
   const [categories, setCategories] = useState<CategoryDto[]>([]);
@@ -53,7 +54,7 @@ export default function CategoryListPage() {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold tracking-tight">Categories</h1>
         <Button asChild>
-          <Link href="/admin/categories/create">
+          <Link href={ROUTES.ADMIN.CATEGORIES.CREATE}>
             <Plus className="mr-2 h-4 w-4" />
             Create New
           </Link>

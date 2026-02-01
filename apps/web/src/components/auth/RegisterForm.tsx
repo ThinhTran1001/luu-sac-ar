@@ -37,7 +37,7 @@ export function RegisterForm() {
       const user = await registerAuth(data);
       toast.success('Account created successfully');
       if (user.role === 'ADMIN') {
-        router.push(ROUTES.ADMIN);
+        router.push(ROUTES.ADMIN.BASE);
       } else {
         router.push(ROUTES.HOME);
       }
@@ -99,7 +99,7 @@ export function RegisterForm() {
           </Button>
           <div className="text-center text-sm text-muted-foreground">
             Already have an account?{' '}
-            <Link href="/auth/login" className="font-medium text-primary hover:underline">
+            <Link href={ROUTES.AUTH.LOGIN} className="font-medium text-primary hover:underline">
               Sign in
             </Link>
           </div>

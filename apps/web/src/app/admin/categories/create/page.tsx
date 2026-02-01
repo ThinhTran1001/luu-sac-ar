@@ -17,6 +17,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { toast } from 'sonner';
+import { ROUTES } from '@/constants/routes';
 
 export default function CreateCategoryPage() {
   const router = useRouter();
@@ -34,7 +35,7 @@ export default function CreateCategoryPage() {
     toast.promise(promise, {
       loading: 'Creating category...',
       success: () => {
-        router.push('/admin/categories');
+        router.push(ROUTES.ADMIN.CATEGORIES.BASE);
         return 'Category created successfully';
       },
       error: 'Failed to create category',

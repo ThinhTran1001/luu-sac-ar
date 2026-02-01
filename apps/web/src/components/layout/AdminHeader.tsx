@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { ROUTES } from '@/constants/routes';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -21,7 +22,7 @@ export function AdminHeader() {
 
   const handleLogout = async () => {
     await logout();
-    router.push('/login');
+    router.push(ROUTES.AUTH.LOGIN);
   };
 
   return (

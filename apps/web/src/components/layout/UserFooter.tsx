@@ -26,7 +26,7 @@ export function UserFooter() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="/products"
+                  href={ROUTES.PRODUCTS}
                   className="text-sm text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white transition-colors"
                 >
                   All Collections
@@ -34,7 +34,7 @@ export function UserFooter() {
               </li>
               <li>
                 <Link
-                  href="/categories/vases"
+                  href={ROUTES.CATEGORIES.VASES}
                   className="text-sm text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white transition-colors"
                 >
                   Vases & Decor
@@ -42,7 +42,7 @@ export function UserFooter() {
               </li>
               <li>
                 <Link
-                  href="/categories/tableware"
+                  href={ROUTES.CATEGORIES.TABLEWARE}
                   className="text-sm text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white transition-colors"
                 >
                   Tableware
@@ -58,7 +58,7 @@ export function UserFooter() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="/contact"
+                  href={ROUTES.CONTACT}
                   className="text-sm text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white transition-colors"
                 >
                   Contact Us
@@ -66,7 +66,7 @@ export function UserFooter() {
               </li>
               <li>
                 <Link
-                  href="/shipping"
+                  href={ROUTES.SHIPPING}
                   className="text-sm text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white transition-colors"
                 >
                   Shipping Policy
@@ -74,7 +74,7 @@ export function UserFooter() {
               </li>
               <li>
                 <Link
-                  href="/returns"
+                  href={ROUTES.RETURNS}
                   className="text-sm text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white transition-colors"
                 >
                   Returns & Exchanges
@@ -90,7 +90,7 @@ export function UserFooter() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="/about"
+                  href={ROUTES.ABOUT}
                   className="text-sm text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white transition-colors"
                 >
                   About Us
@@ -98,7 +98,7 @@ export function UserFooter() {
               </li>
               <li>
                 <Link
-                  href="/privacy"
+                  href={ROUTES.PRIVACY}
                   className="text-sm text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white transition-colors"
                 >
                   Privacy Policy
@@ -106,7 +106,7 @@ export function UserFooter() {
               </li>
               <li>
                 <Link
-                  href="/terms"
+                  href={ROUTES.TERMS}
                   className="text-sm text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white transition-colors"
                 >
                   Terms of Service

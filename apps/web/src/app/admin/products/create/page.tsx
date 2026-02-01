@@ -5,6 +5,7 @@ import { productService } from '@/services/product.service';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { ROUTES } from '@/constants/routes';
 
 export default function CreateProductPage() {
   const router = useRouter();
@@ -17,7 +18,7 @@ export default function CreateProductPage() {
     toast.promise(promise, {
       loading: 'Creating product...',
       success: () => {
-        router.push('/admin/products');
+        router.push(ROUTES.ADMIN.PRODUCTS.BASE);
         return 'Product created successfully';
       },
       error: 'Failed to create product',

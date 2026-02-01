@@ -37,7 +37,7 @@ export function LoginForm() {
       const user = await login(data);
       toast.success('Signed in successfully');
       if (user.role === 'ADMIN') {
-        router.push(ROUTES.ADMIN);
+        router.push(ROUTES.ADMIN.BASE);
       } else {
         router.push(ROUTES.HOME);
       }
@@ -72,7 +72,7 @@ export function LoginForm() {
             <div className="flex items-center justify-between">
               <Label htmlFor="password">Password</Label>
               <Link
-                href="/auth/forgot-password"
+                href={ROUTES.AUTH.FORGOT_PASSWORD}
                 className="text-sm font-medium text-primary hover:underline"
               >
                 Forgot password?
@@ -95,7 +95,7 @@ export function LoginForm() {
           </Button>
           <div className="text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{' '}
-            <Link href="/auth/register" className="font-medium text-primary hover:underline">
+            <Link href={ROUTES.AUTH.REGISTER} className="font-medium text-primary hover:underline">
               Sign up
             </Link>
           </div>

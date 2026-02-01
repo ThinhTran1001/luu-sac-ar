@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ReactNode } from 'react';
 import { AdminHeader } from '@/components/layout/AdminHeader';
 import { AdminFooter } from '@/components/layout/AdminFooter';
+import { ROUTES } from '@/constants/routes';
 import {
   LayoutDashboard,
   Tag,
@@ -14,9 +15,9 @@ import {
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const menuItems = [
-    { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-    { name: 'Categories', href: '/admin/categories', icon: Tag },
-    { name: 'Products', href: '/admin/products', icon: Package },
+    { name: 'Dashboard', href: ROUTES.ADMIN.BASE, icon: LayoutDashboard },
+    { name: 'Categories', href: ROUTES.ADMIN.CATEGORIES.BASE, icon: Tag },
+    { name: 'Products', href: ROUTES.ADMIN.PRODUCTS.BASE, icon: Package },
     { name: 'Orders', href: '/admin/orders', icon: ShoppingCart },
     { name: 'Customers', href: '/admin/customers', icon: Users },
     { name: 'Reports', href: '/admin/reports', icon: BarChart3 },
@@ -27,7 +28,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r flex-col z-40 hidden md:flex shadow-sm">
         <div className="h-16 flex items-center px-8 border-b">
-          <Link href="/admin" className="flex items-center gap-2">
+          <Link href={ROUTES.ADMIN.BASE} className="flex items-center gap-2">
             <div className="h-7 w-7 bg-blue-600 rounded flex items-center justify-center text-white font-bold text-sm">
               A
             </div>

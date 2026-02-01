@@ -41,13 +41,13 @@ export function UserHeader() {
               Home
             </Link>
             <Link
-              href="/products"
+              href={ROUTES.PRODUCTS}
               className="text-sm font-medium hover:text-primary transition-colors"
             >
               Products
             </Link>
             <Link
-              href="/categories"
+              href={ROUTES.CATEGORIES.BASE}
               className="text-sm font-medium hover:text-primary transition-colors"
             >
               Categories
@@ -84,14 +84,14 @@ export function UserHeader() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="/profile">
+                  <Link href={ROUTES.PROFILE}>
                     <User className="mr-2 h-4 w-4" />
                     <span>Profile</span>
                   </Link>
                 </DropdownMenuItem>
                 {user.role === 'ADMIN' && (
                   <DropdownMenuItem asChild>
-                    <Link href="/admin">
+                    <Link href={ROUTES.ADMIN.BASE}>
                       <Settings className="mr-2 h-4 w-4" />
                       <span>Admin Dashboard</span>
                     </Link>
