@@ -4,6 +4,8 @@ import { RegisterDto, LoginDto, ResetPasswordDto } from '@luu-sac/shared';
 import { User } from '@prisma/client';
 import { MESSAGES } from '../constants/messages';
 import prisma from '../utils/prisma';
+import { BadRequestException, UnauthorizedException } from '../utils/app-error';
+
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecret';
 
 export class AuthService {
@@ -13,7 +15,7 @@ export class AuthService {
     });
 
     if (existingUser) {
-      throw new Error(MESSAGES.AUTH.USER_ALREADY_EXISTS);
+      throw new BadRequestException(MESSAGES.AUTH.USER_ALREADY_EXISTS);
     }
 
     const hashedPassword = await argon2.hash(dto.password!);
@@ -36,17 +38,17 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new Error(MESSAGES.AUTH.INVALID_CREDENTIALS);
+      throw new UnauthorizedException(MESSAGES.AUTH.INVALID_CREDENTIALS);
     }
 
     if (!user.password) {
-      throw new Error(MESSAGES.AUTH.GOOGLE_LOGIN_REQUIRED);
+      throw new BadRequestException(MESSAGES.AUTH.GOOGLE_LOGIN_REQUIRED);
     }
 
     const isValid = await argon2.verify(user.password, dto.password!);
 
     if (!isValid) {
-      throw new Error(MESSAGES.AUTH.INVALID_CREDENTIALS);
+      throw new UnauthorizedException(MESSAGES.AUTH.INVALID_CREDENTIALS);
     }
 
     return this.generateToken(user);
@@ -67,7 +69,7 @@ export class AuthService {
       picture: 'https://via.placeholder.com/150',
     }; // REPLACE THIS WITH REAL VERIFICATION
 
-    // if (!payload) throw new Error('Invalid Google Token');
+    // if (!payload) throw new BadRequestException('Invalid Google Token');
 
     let user = await prisma.user.findUnique({
       where: { email: payload.email },
@@ -96,7 +98,7 @@ export class AuthService {
   async forgotPassword(email: string) {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-      throw new Error(MESSAGES.AUTH.USER_NOT_FOUND);
+      throw new BadRequestException(MESSAGES.AUTH.USER_NOT_FOUND);
     }
 
     const resetToken = Math.random().toString(36).substring(2, 15);
@@ -124,7 +126,7 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new Error(MESSAGES.AUTH.INVALID_OR_EXPIRED_TOKEN);
+      throw new BadRequestException(MESSAGES.AUTH.INVALID_OR_EXPIRED_TOKEN);
     }
 
     const hashedPassword = await argon2.hash(dto.newPassword);

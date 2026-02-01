@@ -1,6 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { CreateProductDto, UpdateProductDto, ProductQueryDto } from '@luu-sac/shared';
 import prisma from '../utils/prisma';
+import { NotFoundException } from '../utils/app-error';
 
 export class ProductService {
   static async create(dto: CreateProductDto) {
@@ -53,13 +54,21 @@ export class ProductService {
   }
 
   static async findOne(id: string) {
-    return prisma.product.findUnique({
+    const product = await prisma.product.findUnique({
       where: { id },
       include: { category: true },
     });
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    return product;
   }
 
   static async update(id: string, dto: UpdateProductDto) {
+    await this.findOne(id); // Ensure exists
+
     return prisma.product.update({
       where: { id },
       data: dto,
@@ -67,9 +76,8 @@ export class ProductService {
   }
 
   static async delete(id: string) {
-    // Soft delete or real delete?
-    // Using real delete for now as per schema typically doesn't imply soft delete logic yet unless enforced
-    // But schema has status DELETED. Let's start with updating status to DELETED
+    await this.findOne(id); // Ensure exists
+
     return prisma.product.update({
       where: { id },
       data: { status: 'DELETED' },

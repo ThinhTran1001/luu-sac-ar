@@ -6,10 +6,15 @@
     "dev:web": "npm run dev -w apps/web",
     "dev:api": "npm run dev -w apps/api",
     "build": "npm run build --workspaces --if-present",
+    "build:shared": "npm run build -w packages/shared",
+    "build:api": "npm run build -w apps/api",
+    "build:web": "npm run build -w apps/web",
     "lint": "npm run lint --workspaces --if-present",
     "format": "npm run format --workspaces --if-present",
     "check": "npm run lint && npm run format",
-    "prisma:generate": "npm run prisma generate -w apps/api"
+    "db:generate": "npx prisma generate --schema=apps/api/prisma/schema.prisma",
+    "db:migrate": "npx prisma migrate dev --schema=apps/api/prisma/schema.prisma",
+    "db:studio": "npx prisma studio --schema=apps/api/prisma/schema.prisma"
   },
   "workspaces": [
     "apps/*",
