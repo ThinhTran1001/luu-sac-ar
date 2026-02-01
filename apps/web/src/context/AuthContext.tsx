@@ -7,8 +7,8 @@ import { authService } from '../services/auth.service';
 interface AuthContextType {
   user: UserDto | null;
   token: string | null;
-  login: (dto: LoginDto) => Promise<void>;
-  register: (dto: RegisterDto) => Promise<void>;
+  login: (dto: LoginDto) => Promise<UserDto>;
+  register: (dto: RegisterDto) => Promise<UserDto>;
   logout: () => void;
   isLoading: boolean;
 }
@@ -30,23 +30,24 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setIsLoading(false);
   }, []);
 
-  const login = async (dto: LoginDto): Promise<void> => {
-    // Error handling is done in the API interceptor which extracts message from ApiResponse
+  const login = async (dto: LoginDto): Promise<UserDto> => {
     const data = await authService.login(dto);
     setToken(data.token);
     setUser(data.user);
     localStorage.setItem('token', data.token);
     localStorage.setItem('user', JSON.stringify(data.user));
+    return data.user;
   };
 
-  const register = async (dto: RegisterDto): Promise<void> => {
-    // Error handling is done in the API interceptor which extracts message from ApiResponse
+  const register = async (dto: RegisterDto): Promise<UserDto> => {
     const data = await authService.register(dto);
     setToken(data.token);
     setUser(data.user);
     localStorage.setItem('token', data.token);
     localStorage.setItem('user', JSON.stringify(data.user));
+    return data.user;
   };
+
 
   const logout = (): void => {
     setToken(null);

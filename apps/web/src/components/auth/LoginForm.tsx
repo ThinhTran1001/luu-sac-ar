@@ -34,9 +34,13 @@ export function LoginForm() {
 
   const onSubmit = async (data: LoginDto) => {
     try {
-      await login(data);
+      const user = await login(data);
       toast.success('Signed in successfully');
-      router.push(ROUTES.HOME);
+      if (user.role === 'ADMIN') {
+        router.push(ROUTES.ADMIN);
+      } else {
+        router.push(ROUTES.HOME);
+      }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'An unexpected error occurred';
       toast.error(message);

@@ -34,9 +34,13 @@ export function RegisterForm() {
 
   const onSubmit = async (data: RegisterDto) => {
     try {
-      await registerAuth(data);
+      const user = await registerAuth(data);
       toast.success('Account created successfully');
-      router.push(ROUTES.HOME);
+      if (user.role === 'ADMIN') {
+        router.push(ROUTES.ADMIN);
+      } else {
+        router.push(ROUTES.HOME);
+      }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'An unexpected error occurred';
       toast.error(message);

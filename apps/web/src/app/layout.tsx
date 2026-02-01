@@ -15,11 +15,8 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-import { UserHeader } from '@/components/layout/UserHeader';
-import { UserFooter } from '@/components/layout/UserFooter';
-
 export const metadata: Metadata = {
-  title: 'LUU SAC | Premium Ceramics & Pottery',
+  title: 'LƯU SẮC | Premium Ceramics & Pottery',
   description: 'Exquisite handcrafted ceramics and pottery for your modern home.',
 };
 
@@ -30,14 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
         <Providers>
           <AuthProvider>
-            <UserHeader />
-            <main className="flex-1">{children}</main>
-            <UserFooter />
+            {children}
           </AuthProvider>
           <Toaster />
         </Providers>
@@ -45,3 +38,4 @@ export default function RootLayout({
     </html>
   );
 }
+
