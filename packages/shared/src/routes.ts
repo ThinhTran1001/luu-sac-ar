@@ -7,4 +7,17 @@ export const API_ROUTES = {
     FORGOT_PASSWORD: "/forgot-password",
     RESET_PASSWORD: "/reset-password",
   },
+  PRODUCTS: {
+    BASE: "/products",
+    BY_ID: "/:id",
+    MODEL: "/:id/model",
+    TEXTURE_PREVIEW: "/:id/texture-preview",
+  },
+  CATEGORIES: {
+    BASE: "/categories",
+    BY_ID: "/:id",
+  },
+  UPLOADS: {
+    BASE: "/uploads",
+  },
 };
