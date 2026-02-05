@@ -5,13 +5,14 @@ echo "📦 Installing dependencies..."
 npm install
 
 echo "🗄️  Generating Prisma Client..."
-cd apps/api
-npx prisma generate
+npx prisma generate --schema=apps/api/prisma/schema.prisma
 
 echo "🔧 Building API..."
+cd apps/api
 npm run build
+cd ../..
 
 echo "🚀 Running database migrations..."
-npx prisma migrate deploy
+npx prisma migrate deploy --schema=apps/api/prisma/schema.prisma
 
 echo "✅ API build complete!"
