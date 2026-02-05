@@ -1,7 +1,12 @@
 import { Request, Response } from 'express';
 import { ProductService } from '../services/product.service';
 import { sendSuccess } from '../utils/response';
-import { CreateProductSchema, UpdateProductSchema, ProductQuerySchema } from '@luu-sac/shared';
+import {
+  CreateProductSchema,
+  UpdateProductSchema,
+  ProductQuerySchema,
+  PublicProductQuerySchema,
+} from '@luu-sac/shared';
 import { asyncHandler } from '../utils/async-handler';
 import { MESSAGES } from '../constants/messages';
 import { AppError } from '../utils/app-error';
@@ -70,5 +75,23 @@ export class ProductController {
     const id = req.params.id as string;
     await ProductService.delete(id);
     sendSuccess(res, null, MESSAGES.PRODUCT.DELETED_SUCCESS);
+  });
+
+  // Public endpoints (no auth required)
+  static findAllPublic = asyncHandler(async (req: Request, res: Response) => {
+    const query = PublicProductQuerySchema.parse(req.query);
+    const result = await ProductService.findAllPublic(query);
+    sendSuccess(res, result, MESSAGES.PRODUCT.LIST_RETRIEVED_SUCCESS);
+  });
+
+  static findOnePublic = asyncHandler(async (req: Request, res: Response) => {
+    const id = req.params.id as string;
+    const product = await ProductService.findOnePublic(id);
+
+    if (!product) {
+      throw new AppError(MESSAGES.PRODUCT.NOT_FOUND, 404);
+    }
+
+    sendSuccess(res, product, MESSAGES.PRODUCT.RETRIEVED_SUCCESS);
   });
 }

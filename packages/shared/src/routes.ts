@@ -11,6 +11,8 @@ export const API_ROUTES = {
   PRODUCTS: {
     BASE: "/products",
     BY_ID: "/:id",
+    PUBLIC: "/products/public",
+    PUBLIC_BY_ID: "/products/public/:id",
     MODEL: "/:id/model",
     TEXTURE_PREVIEW: "/:id/texture-preview",
   },

@@ -7,6 +7,11 @@ const router = Router();
 
 // BASE: /products
 
+// Public routes (no auth required) - MUST be before authenticated routes
+router.get('/public', ProductController.findAllPublic);
+router.get('/public/:id', ProductController.findOnePublic);
+
+// Admin routes (auth required via middleware in main app)
 router.post(
   '/',
   upload.fields([
