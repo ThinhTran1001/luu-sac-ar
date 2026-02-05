@@ -6,7 +6,7 @@ services:
     region: oregon
     plan: free
     buildCommand: bash scripts/build-api.sh
-    startCommand: cd apps/api && (node dist/index.js || node dist/apps/api/src/index.js)
+    startCommand: cd apps/api && node dist/index.js
     envVars:
       - key: NODE_ENV
         value: production
