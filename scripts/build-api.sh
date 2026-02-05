@@ -12,10 +12,6 @@ cd ../..
 echo "🔧 Building API..."
 cd apps/api
 npm run build
-echo "📁 Contents of apps/api after build:"
-ls -la
-echo "📁 Contents of apps/api/dist (if exists):"
-ls -la dist/ || echo "dist directory not found!"
 cd ../..
 
 echo "🚀 Running database migrations..."
