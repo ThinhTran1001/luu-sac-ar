@@ -12,6 +12,8 @@ cd ../..
 echo "🔧 Building API..."
 cd apps/api
 npm run build
+echo "📁 Listing dist directory structure:"
+find dist -type f 2>/dev/null || ls -R dist/ 2>/dev/null || echo "No dist found"
 cd ../..
 
 echo "🚀 Running database migrations..."
