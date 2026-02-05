@@ -1,0 +1,41 @@
+services:
+  # API Service
+  - type: web
+    name: luu-sac-api
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: bash scripts/build-api.sh
+    startCommand: cd apps/api && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+    healthCheckPath: /
+
+  # Web Service
+  - type: web
+    name: luu-sac-web
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: bash scripts/build-web.sh
+    startCommand: cd apps/web && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        sync: false
