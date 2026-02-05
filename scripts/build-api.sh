@@ -13,6 +13,6 @@ npm run build
 cd ../..
 
 echo "🚀 Running database migrations..."
-npx prisma migrate deploy --schema=apps/api/prisma/schema.prisma
+npx prisma migrate deploy --schema=apps/api/prisma/schema.prisma --url="$DATABASE_URL"
 
 echo "✅ API build complete!"

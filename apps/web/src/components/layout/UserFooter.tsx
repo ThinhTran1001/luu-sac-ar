@@ -26,7 +26,7 @@ export function UserFooter() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href={ROUTES.PRODUCTS}
+                  href={ROUTES.PRODUCTS.BASE}
                   className="text-sm text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white transition-colors"
                 >
                   All Collections

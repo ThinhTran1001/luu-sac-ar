@@ -41,8 +41,8 @@ export function UserHeader() {
               Home
             </Link>
             <Link
-              href={ROUTES.PRODUCTS}
-              className="text-sm font-medium hover:text-primary transition-colors"
+              href={ROUTES.PRODUCTS.BASE}
+              className="text-sm font-medium text-zinc-700 hover:text-black dark:text-zinc-300 dark:hover:text-white transition-colors"
             >
               Products
             </Link>
