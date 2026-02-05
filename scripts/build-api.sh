@@ -4,9 +4,6 @@ set -e
 echo "📦 Installing dependencies..."
 npm install
 
-echo "🔨 Building shared package..."
-npm run build:shared
-
 echo "🗄️  Generating Prisma Client..."
 cd apps/api
 npx prisma generate
