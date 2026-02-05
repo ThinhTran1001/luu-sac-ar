@@ -4,7 +4,12 @@ set -e
 echo "📦 Installing dependencies..."
 npm install
 
-echo "🗄️  Generating Prisma Client..."
+echo "� Building shared package..."
+cd packages/shared
+npm run build
+cd ../..
+
+echo "�🗄️  Generating Prisma Client..."
 cd apps/api
 npx prisma generate
 cd ../..
