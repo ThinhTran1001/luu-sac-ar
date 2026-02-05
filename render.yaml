@@ -17,7 +17,10 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: CORS_ORIGIN
-        sync: false
+        fromService:
+          type: web
+          name: luu-sac-web
+          property: host
       - key: CLOUDINARY_CLOUD_NAME
         sync: false
       - key: CLOUDINARY_API_KEY
@@ -38,4 +41,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: NEXT_PUBLIC_API_URL
-        sync: false
+        fromService:
+          type: web
+          name: luu-sac-api
+          property: host
