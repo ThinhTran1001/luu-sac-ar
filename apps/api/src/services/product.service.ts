@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, ProcessingStatus } from '@prisma/client';
 import {
   CreateProductDto,
   UpdateProductDto,
@@ -7,11 +7,62 @@ import {
 } from '@luu-sac/shared';
 import prisma from '../utils/prisma';
 import { NotFoundException } from '../utils/app-error';
+import { AR3DService } from './ar-3d.service';
 
 export class ProductService {
-  static async create(dto: CreateProductDto) {
-    return prisma.product.create({
-      data: dto,
+  /**
+   * Create product with optional 3D model generation
+   */
+  static async create(dto: CreateProductDto, imageNoBgBuffer?: Buffer) {
+    // Create product first (explicitly pick fields to avoid passing extra DTO fields)
+    const product = await prisma.product.create({
+      data: {
+        name: dto.name,
+        description: dto.description,
+        price: dto.price,
+        quantity: dto.quantity,
+        imageUrl: dto.imageUrl,
+        thumbnailImage: dto.thumbnailImage,
+        galleryImages: dto.galleryImages,
+        categoryId: dto.categoryId,
+        status: dto.status,
+        processingStatus: imageNoBgBuffer ? ProcessingStatus.PROCESSING : ProcessingStatus.PENDING,
+      },
+    });
+
+    // If background-removed image provided, generate 3D model
+    if (imageNoBgBuffer) {
+      try {
+        const { glbBuffer, fileSize } = await AR3DService.generateFromImage(imageNoBgBuffer);
+        const { url: glbUrl } = await AR3DService.uploadGLBToCloudinary(glbBuffer, product.id);
+
+        // Update product with GLB data
+        return prisma.product.update({
+          where: { id: product.id },
+          data: {
+            glbUrl,
+            glbFileSize: fileSize,
+            processingStatus: 'COMPLETED',
+          },
+          include: { category: true },
+        });
+      } catch (error) {
+        // Mark as failed but don't throw - product is still created
+        await prisma.product.update({
+          where: { id: product.id },
+          data: { processingStatus: 'FAILED' },
+        });
+        console.error('3D generation failed:', error);
+        return prisma.product.findUnique({
+          where: { id: product.id },
+          include: { category: true },
+        });
+      }
+    }
+
+    return prisma.product.findUnique({
+      where: { id: product.id },
+      include: { category: true },
     });
   }
 
@@ -76,7 +127,17 @@ export class ProductService {
 
     return prisma.product.update({
       where: { id },
-      data: dto,
+      data: {
+        ...(dto.name !== undefined && { name: dto.name }),
+        ...(dto.description !== undefined && { description: dto.description }),
+        ...(dto.price !== undefined && { price: dto.price }),
+        ...(dto.quantity !== undefined && { quantity: dto.quantity }),
+        ...(dto.imageUrl !== undefined && { imageUrl: dto.imageUrl }),
+        ...(dto.thumbnailImage !== undefined && { thumbnailImage: dto.thumbnailImage }),
+        ...(dto.galleryImages !== undefined && { galleryImages: dto.galleryImages }),
+        ...(dto.categoryId !== undefined && { categoryId: dto.categoryId }),
+        ...(dto.status !== undefined && { status: dto.status }),
+      },
     });
   }
 

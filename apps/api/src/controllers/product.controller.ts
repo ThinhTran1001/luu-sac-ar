@@ -16,6 +16,7 @@ interface MulterFiles {
   imageUrl?: Express.Multer.File[];
   thumbnailImage?: Express.Multer.File[];
   galleryImages?: Express.Multer.File[];
+  imageNoBg?: Express.Multer.File[]; // For AR 3D generation
 }
 
 export class ProductController {
@@ -32,7 +33,10 @@ export class ProductController {
     // Zod validation
     const dto = CreateProductSchema.parse(body);
 
-    const product = await ProductService.create(dto);
+    // Get imageNoBg buffer for 3D generation (if provided)
+    const imageNoBgBuffer = files?.imageNoBg?.[0]?.buffer;
+
+    const product = await ProductService.create(dto, imageNoBgBuffer);
     sendSuccess(res, product, MESSAGES.PRODUCT.CREATED_SUCCESS);
   });
 

@@ -50,27 +50,36 @@ model Category {
 }
 
 model Product {
-  id             String        @id @default(uuid())
-  name           String
-  description    String
-  price          Float
-  quantity       Int           @default(0)
-  imageUrl       String
-  thumbnailImage String?
-  galleryImages  String[]
-  glbUrl         String?
-  status         ProductStatus @default(ACTIVE)
-  category       Category      @relation(fields: [categoryId], references: [id])
-  categoryId     String
-  orderItems     OrderItem[]
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  id               String           @id @default(uuid())
+  name             String
+  description      String
+  price            Float
+  quantity         Int              @default(0)
+  imageUrl         String
+  thumbnailImage   String?
+  galleryImages    String[]
+  glbUrl           String?
+  glbFileSize      Int?
+  processingStatus ProcessingStatus @default(PENDING)
+  status           ProductStatus    @default(ACTIVE)
+  category         Category         @relation(fields: [categoryId], references: [id])
+  categoryId       String
+  orderItems       OrderItem[]
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
 }
 
 enum ProductStatus {
   ACTIVE
   HIDE
   DELETED
+}
+
+enum ProcessingStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
 }
 
 model CustomDesign {

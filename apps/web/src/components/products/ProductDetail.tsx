@@ -56,6 +56,7 @@ export function ProductDetail({ productId }: ProductDetailProps) {
                 modelUrl={product.glbUrl!}
                 productName={product.name}
                 posterUrl={product.thumbnailImage || product.imageUrl}
+                processingStatus={product.processingStatus as any}
               />
             </TabsContent>
           </Tabs>

@@ -30,6 +30,12 @@ export const MESSAGES = {
     NOT_FOUND: 'Category not found',
     LIST_RETRIEVED_SUCCESS: 'Categories retrieved successfully',
   },
+  AR: {
+    PROCESSING_STARTED: 'AR model generation started',
+    GENERATION_SUCCESS: 'AR model generated successfully',
+    GENERATION_FAILED: 'Failed to generate AR model',
+    INVALID_IMAGE: 'Invalid image format for AR processing',
+  },
   ERROR: {
     DEFAULT: 'Something went wrong',
   },

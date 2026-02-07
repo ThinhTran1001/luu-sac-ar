@@ -18,6 +18,7 @@ router.post(
     { name: 'imageUrl', maxCount: 1 },
     { name: 'thumbnailImage', maxCount: 1 },
     { name: 'galleryImages', maxCount: 10 },
+    { name: 'imageNoBg', maxCount: 1 }, // For AR 3D model generation
   ]),
   ProductController.create,
 );

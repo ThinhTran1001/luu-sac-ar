@@ -1,22 +1,57 @@
-/// <reference path="../../../src/types/model-viewer.d.ts" />
-
+/// <reference path="../../types/model-viewer.d.ts" />
 
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import '@google/model-viewer';
 import { Button } from '@/components/ui/button';
-import { RotateCcw } from 'lucide-react';
+import { RotateCcw, Loader2, AlertCircle, Smartphone, Maximize2 } from 'lucide-react';
 import type { ModelViewerElement } from '@/types/model-viewer';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface ProductViewer3DProps {
   modelUrl: string;
   productName: string;
-  posterUrl?: string; // Thumbnail image while loading
+  posterUrl?: string;
+  processingStatus?: 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
 }
 
-export function ProductViewer3D({ modelUrl, productName, posterUrl }: ProductViewer3DProps) {
+export function ProductViewer3D({
+  modelUrl,
+  productName,
+  posterUrl,
+  processingStatus = 'COMPLETED',
+}: ProductViewer3DProps) {
   const viewerRef = useRef<ModelViewerElement>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+  const [isARSupported, setIsARSupported] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    // Check AR support
+    if (typeof window !== 'undefined') {
+      const checkAR = async () => {
+        // iOS Quick Look support
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        // Android Scene Viewer or WebXR
+        const hasWebXR = 'xr' in navigator;
+
+        setIsARSupported(isIOS || hasWebXR);
+      };
+      checkAR();
+    }
+  }, []);
+
+  const handleLoad = () => {
+    setIsLoading(false);
+    setHasError(false);
+  };
+
+  const handleError = () => {
+    setIsLoading(false);
+    setHasError(true);
+  };
 
   const handleReset = () => {
     if (viewerRef.current) {
@@ -25,8 +60,69 @@ export function ProductViewer3D({ modelUrl, productName, posterUrl }: ProductVie
     }
   };
 
+  const handleFullscreen = () => {
+    const element = viewerRef.current;
+    if (!element) return;
+
+    if (!isFullscreen) {
+      element.requestFullscreen?.();
+      setIsFullscreen(true);
+    } else {
+      document.exitFullscreen?.();
+      setIsFullscreen(false);
+    }
+  };
+
+  // Show processing state
+  if (processingStatus === 'PROCESSING') {
+    return (
+      <div className="relative w-full aspect-square bg-muted rounded-lg flex flex-col items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+        <p className="text-sm font-medium">Generating 3D model...</p>
+        <p className="text-xs text-muted-foreground mt-1">This may take 10-15 seconds</p>
+      </div>
+    );
+  }
+
+  // Show failed state
+  if (processingStatus === 'FAILED' || hasError) {
+    return (
+      <div className="relative w-full aspect-square bg-muted rounded-lg flex flex-col items-center justify-center p-6">
+        <AlertCircle className="h-12 w-12 text-destructive mb-4" />
+        <p className="text-sm font-medium text-center">Failed to load 3D model</p>
+        <p className="text-xs text-muted-foreground text-center mt-1">
+          The 3D model could not be generated for this product.
+        </p>
+      </div>
+    );
+  }
+
+  // Show pending state (no GLB yet)
+  if (processingStatus === 'PENDING' || !modelUrl) {
+    return (
+      <div className="relative w-full aspect-square bg-muted rounded-lg flex flex-col items-center justify-center p-6">
+        <div className="h-12 w-12 rounded-full bg-muted-foreground/10 flex items-center justify-center mb-4">
+          <Smartphone className="h-6 w-6 text-muted-foreground" />
+        </div>
+        <p className="text-sm font-medium text-center">3D View Not Available</p>
+        <p className="text-xs text-muted-foreground text-center mt-1">
+          This product doesn&apos;t have a 3D model yet.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="relative w-full aspect-square">
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-muted rounded-lg z-10">
+          <div className="text-center">
+            <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-2" />
+            <p className="text-sm text-muted-foreground">Loading 3D model...</p>
+          </div>
+        </div>
+      )}
+
       <model-viewer
         ref={viewerRef}
         src={modelUrl}
@@ -44,41 +140,45 @@ export function ProductViewer3D({ modelUrl, productName, posterUrl }: ProductVie
         exposure="1"
         className="w-full h-full rounded-lg"
         style={{ width: '100%', height: '100%' }}
+        onLoad={handleLoad}
+        onError={handleError}
       >
         {/* AR Button (shows on AR-capable devices) */}
         <button
           slot="ar-button"
-          className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold shadow-lg hover:bg-primary/90 transition-colors"
+          className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold shadow-lg hover:bg-primary/90 transition-colors flex items-center gap-2"
         >
+          <Smartphone className="h-5 w-5" />
           View in Your Space
         </button>
 
-        {/* Loading indicator */}
-        <div slot="poster" className="absolute inset-0 flex items-center justify-center bg-muted">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-2"></div>
-            <p className="text-sm text-muted-foreground">Loading 3D model...</p>
-          </div>
+        {/* Loading Progress */}
+        <div slot="progress-bar" className="absolute bottom-0 left-0 right-0 h-1 bg-primary/20">
+          <div className="h-full bg-primary transition-all" style={{ width: '100%' }} />
         </div>
       </model-viewer>
 
       {/* Control Buttons */}
       <div className="absolute top-4 right-4 flex gap-2">
-        <Button
-          size="icon"
-          variant="secondary"
-          onClick={handleReset}
-          title="Reset view"
-        >
+        <Button size="icon" variant="secondary" onClick={handleReset} title="Reset view">
           <RotateCcw className="h-4 w-4" />
+        </Button>
+        <Button size="icon" variant="secondary" onClick={handleFullscreen} title="Fullscreen">
+          <Maximize2 className="h-4 w-4" />
         </Button>
       </div>
 
+      {/* AR Support Indicator */}
+      {isARSupported && (
+        <div className="absolute top-4 left-4 bg-green-600 text-white px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
+          <Smartphone className="h-3 w-3" />
+          AR Ready
+        </div>
+      )}
+
       {/* Instructions */}
       <div className="absolute bottom-4 left-4 bg-background/80 backdrop-blur-sm px-3 py-2 rounded-md text-xs">
-        <p className="text-muted-foreground">
-          Drag to rotate • Scroll to zoom • Pinch to scale
-        </p>
+        <p className="text-muted-foreground">Drag to rotate • Scroll to zoom • Pinch to scale</p>
       </div>
     </div>
   );

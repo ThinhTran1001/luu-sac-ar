@@ -1,6 +1,12 @@
 import { z } from "zod";
 
 export const ProductStatusSchema = z.enum(["ACTIVE", "HIDE", "DELETED"]);
+export const ProcessingStatusSchema = z.enum([
+  "PENDING",
+  "PROCESSING",
+  "COMPLETED",
+  "FAILED",
+]);
 
 export const ProductSchema = z.object({
   id: z.string().uuid(),
@@ -12,6 +18,8 @@ export const ProductSchema = z.object({
   thumbnailImage: z.string().url().optional().nullable(),
   galleryImages: z.array(z.string().url()),
   glbUrl: z.string().url().optional().nullable(),
+  glbFileSize: z.number().optional().nullable(),
+  processingStatus: ProcessingStatusSchema.optional().nullable(),
   status: ProductStatusSchema,
   categoryId: z.string().uuid(),
   createdAt: z.date().or(z.string()),

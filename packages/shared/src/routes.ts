@@ -15,6 +15,9 @@ export const API_ROUTES = {
     PUBLIC_BY_ID: "/products/public/:id",
     MODEL: "/:id/model",
     TEXTURE_PREVIEW: "/:id/texture-preview",
+    CREATE_WITH_3D: "/create-with-3d",
+    REGENERATE_3D: "/:id/regenerate-3d",
+    STATUS_3D: "/:id/3d-status",
   },
   CATEGORIES: {
     BASE: "/categories",
@@ -22,5 +25,8 @@ export const API_ROUTES = {
   },
   UPLOADS: {
     BASE: "/uploads",
+  },
+  AR: {
+    BASE: "/admin/products",
   },
 };
