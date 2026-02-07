@@ -44,11 +44,11 @@
     "prisma": "^7.3.0",
     "sharp": "^0.34.5",
     "three": "^0.172.0",
+    "@types/three": "^0.182.0",
     "typescript": "^5.9.3",
     "winston": "^3.19.0"
   },
   "devDependencies": {
-    "@types/three": "^0.182.0",
     "@typescript-eslint/eslint-plugin": "^8.54.0",
     "@typescript-eslint/parser": "^8.54.0",
     "eslint": "^9.39.2",
