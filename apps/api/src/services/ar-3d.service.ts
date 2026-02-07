@@ -192,11 +192,11 @@ export class AR3DService {
     return new Promise((resolve, reject) => {
       exporter.parse(
         mesh,
-        (gltf) => {
+        (gltf: ArrayBuffer | { [key: string]: unknown }) => {
           const buffer = Buffer.from(gltf as ArrayBuffer);
           resolve(buffer);
         },
-        (error) => {
+        (error: ErrorEvent) => {
           reject(new Error(`GLB export failed: ${error.message}`));
         },
         {
