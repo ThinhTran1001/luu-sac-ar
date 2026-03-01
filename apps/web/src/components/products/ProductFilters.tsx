@@ -42,17 +42,17 @@ export function ProductFilters({ filters, onFiltersChange }: ProductFiltersProps
   return (
     <div className="flex flex-wrap gap-4 p-4 bg-muted/50 rounded-lg">
       <div className="flex-1 min-w-[200px]">
-        <Label htmlFor="search">Search</Label>
+        <Label htmlFor="search">Tìm Kiếm</Label>
         <Input
           id="search"
-          placeholder="Search products..."
+          placeholder="Tìm kiếm sản phẩm..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
 
       <div className="w-[200px]">
-        <Label htmlFor="category">Category</Label>
+        <Label htmlFor="category">Danh Mục</Label>
         <Select
           value={filters.categoryId || 'all'}
           onValueChange={(value) =>
@@ -64,10 +64,10 @@ export function ProductFilters({ filters, onFiltersChange }: ProductFiltersProps
           }
         >
           <SelectTrigger id="category">
-            <SelectValue placeholder="All Categories" />
+            <SelectValue placeholder="Tất cả Danh Mục" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Categories</SelectItem>
+            <SelectItem value="all">Tất cả Danh Mục</SelectItem>
             {categories.map((cat) => (
               <SelectItem key={cat.id} value={cat.id}>
                 {cat.name}
@@ -78,7 +78,7 @@ export function ProductFilters({ filters, onFiltersChange }: ProductFiltersProps
       </div>
 
       <div className="w-[200px]">
-        <Label htmlFor="sort">Sort By</Label>
+        <Label htmlFor="sort">Sắp Xếp</Label>
         <Select
           value={`${filters.sortBy}-${filters.sortOrder}`}
           onValueChange={(value) => {
@@ -94,19 +94,19 @@ export function ProductFilters({ filters, onFiltersChange }: ProductFiltersProps
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="createdAt-desc">Newest First</SelectItem>
-            <SelectItem value="createdAt-asc">Oldest First</SelectItem>
-            <SelectItem value="price-asc">Price: Low to High</SelectItem>
-            <SelectItem value="price-desc">Price: High to Low</SelectItem>
-            <SelectItem value="name-asc">Name: A to Z</SelectItem>
-            <SelectItem value="name-desc">Name: Z to A</SelectItem>
+            <SelectItem value="createdAt-desc">Mới Nhất</SelectItem>
+            <SelectItem value="createdAt-asc">Cũ Nhất</SelectItem>
+            <SelectItem value="price-asc">Giá: Thấp đến Cao</SelectItem>
+            <SelectItem value="price-desc">Giá: Cao đến Thấp</SelectItem>
+            <SelectItem value="name-asc">Tên: A đến Z</SelectItem>
+            <SelectItem value="name-desc">Tên: Z đến A</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
       <div className="flex items-end">
         <Button variant="outline" onClick={handleClearFilters}>
-          Clear Filters
+          Xóa Bộ Lọc
         </Button>
       </div>
     </div>

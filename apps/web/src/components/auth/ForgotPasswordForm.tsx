@@ -31,9 +31,9 @@ export function ForgotPasswordForm() {
   const onSubmit = async (data: ForgotPasswordDto) => {
     try {
       await authService.forgotPassword(data.email);
-      toast.success('Check your email for reset instructions');
+      toast.success('Kiểm tra email của bạn để xem hướng dẫn đặt lại mật khẩu');
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to send reset email';
+      const message = err instanceof Error ? err.message : 'Gửi email đặt lại mật khẩu thất bại';
       toast.error(message);
     }
   };
@@ -41,15 +41,15 @@ export function ForgotPasswordForm() {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">Forgot password</CardTitle>
+        <CardTitle className="text-2xl font-bold">Quên mật khẩu</CardTitle>
         <CardDescription>
-          Enter your email address and we&apos;ll send you a link to reset your password
+          Nhập địa chỉ email của bạn và chúng tôi sẽ gửi cho bạn một liên kết để đặt lại mật khẩu
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email address</Label>
+            <Label htmlFor="email">Địa chỉ Email</Label>
             <Input
               id="email"
               type="email"
@@ -64,12 +64,12 @@ export function ForgotPasswordForm() {
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
           <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? 'Sending link...' : 'Send reset link'}
+            {isSubmitting ? 'Đang gửi...' : 'Gửi liên kết đặt lại'}
           </Button>
           <div className="text-center text-sm text-muted-foreground">
-            Remember your password?{' '}
+            Bạn đã nhớ mật khẩu?{' '}
             <Link href={ROUTES.AUTH.LOGIN} className="font-medium text-primary hover:underline">
-              Back to login
+              Quay lại đăng nhập
             </Link>
           </div>
         </CardFooter>

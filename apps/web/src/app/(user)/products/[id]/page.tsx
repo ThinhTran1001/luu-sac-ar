@@ -2,13 +2,12 @@ import { ProductDetail } from '@/components/products/ProductDetail';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
-export default function ProductDetailPage({ params }: { params: { id: string } }) {
+export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Suspense fallback={<ProductDetailSkeleton />}>
-        <ProductDetail productId={params.id} />
-      </Suspense>
-    </div>
+    <Suspense fallback={<ProductDetailSkeleton />}>
+      <ProductDetail productId={id} />
+    </Suspense>
   );
 }
 

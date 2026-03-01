@@ -1,15 +1,23 @@
 'use client';
 
 import { usePublicProductDetail } from '@/hooks/usePublicProductDetail';
+import { useCart } from '@/context/CartContext';
 import { ProductGallery } from './ProductGallery';
-import { ProductViewer3D } from '../ar/ProductViewer3D';
 import { ProductCard } from './ProductCard';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import dynamic from 'next/dynamic';
+
+const ProductViewer3D = dynamic(
+  () => import('../ar/ProductViewer3D').then((mod) => mod.ProductViewer3D),
+  { ssr: false },
+);
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ShoppingCart, Check } from 'lucide-react';
+import { useState } from 'react';
 
 interface ProductDetailProps {
   productId: string;
@@ -17,11 +25,13 @@ interface ProductDetailProps {
 
 export function ProductDetail({ productId }: ProductDetailProps) {
   const { data: product, isLoading, error } = usePublicProductDetail(productId);
+  const { addToCart, setIsCartOpen } = useCart();
+  const [added, setAdded] = useState(false);
 
   if (error) {
     return (
       <Alert variant="destructive">
-        <AlertDescription>Product not found or unavailable.</AlertDescription>
+        <AlertDescription>Không tìm thấy sản phẩm hoặc sản phẩm không khả dụng.</AlertDescription>
       </Alert>
     );
   }
@@ -45,8 +55,8 @@ export function ProductDetail({ productId }: ProductDetailProps) {
         {hasAR ? (
           <Tabs defaultValue="images" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="images">Images</TabsTrigger>
-              <TabsTrigger value="3d">3D View</TabsTrigger>
+              <TabsTrigger value="images">Hình Ảnh</TabsTrigger>
+              <TabsTrigger value="3d">Xem 3D</TabsTrigger>
             </TabsList>
             <TabsContent value="images" className="mt-4">
               <ProductGallery images={images} productName={product.name} />
@@ -76,32 +86,47 @@ export function ProductDetail({ productId }: ProductDetailProps) {
           <Separator />
 
           <div>
-            <h2 className="text-lg font-semibold mb-2">Description</h2>
+            <h2 className="text-lg font-semibold mb-2">Mô Tả</h2>
             <p className="text-muted-foreground">{product.description}</p>
           </div>
 
           {hasAR && (
             <Alert>
               <AlertDescription>
-                📱 <strong>AR Available!</strong> Switch to the 3D View tab and tap "View in Your Space" on your mobile device to see this product in your room.
+                📱 <strong>Hỗ Trợ Thực Tế Ảo (AR)!</strong> Chuyển sang thẻ Xem 3D và nhấn "Xem Trong Không Gian Của Bạn" (View in Your Space) trên thiết bị di động để xem sản phẩm này trong phòng của bạn.
               </AlertDescription>
             </Alert>
           )}
 
           <div className="space-y-3">
-            {hasAR ? (
-              <Button size="lg" className="w-full">
-                Add to Cart
-              </Button>
-            ) : (
-              <>
-                <Button size="lg" className="w-full" disabled>
-                  AR Preview (Coming Soon)
-                </Button>
-                <p className="text-sm text-muted-foreground text-center">
-                  3D model not yet available for this product
-                </p>
-              </>
+            <Button
+              size="lg"
+              className="w-full"
+              onClick={() => {
+                addToCart({
+                  productId: product.id,
+                  name: product.name,
+                  price: product.price,
+                  imageUrl: product.thumbnailImage || product.imageUrl,
+                });
+                setAdded(true);
+                setTimeout(() => setAdded(false), 2000);
+                setIsCartOpen(true);
+              }}
+              disabled={product.quantity <= 0}
+            >
+              {product.quantity <= 0 ? (
+                'Hết Hàng'
+              ) : added ? (
+                <><Check className="mr-2 h-4 w-4" /> Đã Thêm Vào Giỏ</>
+              ) : (
+                <><ShoppingCart className="mr-2 h-4 w-4" /> Thêm Vào Giỏ Hàng</>
+              )}
+            </Button>
+            {product.quantity > 0 && product.quantity <= 5 && (
+              <p className="text-sm text-orange-600 text-center">
+                Chỉ còn {product.quantity} sản phẩm trong kho!
+              </p>
             )}
           </div>
         </div>
@@ -110,7 +135,7 @@ export function ProductDetail({ productId }: ProductDetailProps) {
       {/* Related Products */}
       {product.relatedProducts.length > 0 && (
         <div className="space-y-4">
-          <h2 className="text-2xl font-bold">Related Products</h2>
+          <h2 className="text-2xl font-bold">Sản Phẩm Liên Quan</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {product.relatedProducts.map((relatedProduct) => (
               <ProductCard key={relatedProduct.id} product={relatedProduct} />

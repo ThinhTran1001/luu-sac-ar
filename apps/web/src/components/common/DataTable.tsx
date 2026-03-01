@@ -95,7 +95,7 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results.
+                  Không có kết quả.
                 </TableCell>
               </TableRow>
             )}
@@ -106,7 +106,7 @@ export function DataTable<TData, TValue>({
       {/* Pagination Controls */}
       <div className="flex items-center justify-between px-2">
         <div className="text-sm text-muted-foreground">
-          Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+          Trang {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}
         </div>
         <div className="flex items-center space-x-2">
           <Button
@@ -115,7 +115,7 @@ export function DataTable<TData, TValue>({
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Previous
+            Trước
           </Button>
           <Button
             variant="outline"
@@ -123,7 +123,7 @@ export function DataTable<TData, TValue>({
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Next
+            Sau
           </Button>
         </div>
       </div>

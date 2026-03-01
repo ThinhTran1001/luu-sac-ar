@@ -14,14 +14,13 @@ export function UserFooter() {
               <span className="text-xl font-bold tracking-tight">LƯU SẮC</span>
             </Link>
             <p className="max-w-xs text-sm text-zinc-600 dark:text-zinc-400">
-              Premium quality ceramics and pottery designed for modern lifestyle. Artistry in every
-              piece.
+              Gốm sứ cao cấp thiết kế cho phong cách sống hiện đại. Nghệ thuật trong từng tác phẩm.
             </p>
           </div>
 
           <div>
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-900 dark:text-zinc-100">
-              Shop
+              Cửa Hàng
             </h3>
             <ul className="space-y-2">
               <li>
@@ -29,7 +28,7 @@ export function UserFooter() {
                   href={ROUTES.PRODUCTS.BASE}
                   className="text-sm text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white transition-colors"
                 >
-                  All Collections
+                  Tất Cả Sản Phẩm
                 </Link>
               </li>
               <li>
@@ -37,7 +36,7 @@ export function UserFooter() {
                   href={ROUTES.CATEGORIES.VASES}
                   className="text-sm text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white transition-colors"
                 >
-                  Vases & Decor
+                  Bình Hoa & Trang Trí
                 </Link>
               </li>
               <li>
@@ -45,7 +44,7 @@ export function UserFooter() {
                   href={ROUTES.CATEGORIES.TABLEWARE}
                   className="text-sm text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white transition-colors"
                 >
-                  Tableware
+                  Bộ Đồ Ăn
                 </Link>
               </li>
             </ul>
@@ -53,7 +52,7 @@ export function UserFooter() {
 
           <div>
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-900 dark:text-zinc-100">
-              Support
+              Hỗ Trợ
             </h3>
             <ul className="space-y-2">
               <li>
@@ -61,7 +60,7 @@ export function UserFooter() {
                   href={ROUTES.CONTACT}
                   className="text-sm text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white transition-colors"
                 >
-                  Contact Us
+                  Liên Hệ
                 </Link>
               </li>
               <li>
@@ -69,7 +68,7 @@ export function UserFooter() {
                   href={ROUTES.SHIPPING}
                   className="text-sm text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white transition-colors"
                 >
-                  Shipping Policy
+                  Chính Sách Vận Chuyển
                 </Link>
               </li>
               <li>
@@ -77,7 +76,7 @@ export function UserFooter() {
                   href={ROUTES.RETURNS}
                   className="text-sm text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white transition-colors"
                 >
-                  Returns & Exchanges
+                  Đổi Trả & Hoàn Tiền
                 </Link>
               </li>
             </ul>
@@ -85,7 +84,7 @@ export function UserFooter() {
 
           <div>
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-900 dark:text-zinc-100">
-              Company
+              Công Ty
             </h3>
             <ul className="space-y-2">
               <li>
@@ -93,7 +92,7 @@ export function UserFooter() {
                   href={ROUTES.ABOUT}
                   className="text-sm text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white transition-colors"
                 >
-                  About Us
+                  Về Chúng Tôi
                 </Link>
               </li>
               <li>
@@ -101,7 +100,7 @@ export function UserFooter() {
                   href={ROUTES.PRIVACY}
                   className="text-sm text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white transition-colors"
                 >
-                  Privacy Policy
+                  Chính Sách Bảo Mật
                 </Link>
               </li>
               <li>
@@ -109,7 +108,7 @@ export function UserFooter() {
                   href={ROUTES.TERMS}
                   className="text-sm text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white transition-colors"
                 >
-                  Terms of Service
+                  Điều Khoản Dịch Vụ
                 </Link>
               </li>
             </ul>
@@ -118,10 +117,10 @@ export function UserFooter() {
 
         <div className="mt-12 border-t pt-8 text-center md:flex md:items-center md:justify-between">
           <p className="text-xs text-zinc-500 dark:text-zinc-500">
-            &copy; {new Date().getFullYear()} LUU SAC. All rights reserved.
+            &copy; {new Date().getFullYear()} LƯU SẮC. Bảo lưu mọi quyền.
           </p>
           <div className="mt-4 flex justify-center gap-6 md:mt-0">
-            <span className="text-xs text-zinc-400">Handcrafted in Vietnam</span>
+            <span className="text-xs text-zinc-400">Thủ Công Từ Việt Nam</span>
           </div>
         </div>
       </div>

@@ -31,14 +31,14 @@ export function AdminHeader() {
         <Search className="h-4 w-4 text-gray-400" />
         <input
           type="text"
-          placeholder="Search something..."
+          placeholder="Tìm kiếm..."
           className="bg-transparent border-none text-sm focus:outline-none w-full"
         />
       </div>
 
       <div className="flex items-center gap-4">
         <Link href="/">
-          <Button variant="ghost" size="icon" title="View Store">
+          <Button variant="ghost" size="icon" title="Xem Cửa Hàng">
             <Home className="h-5 w-5 text-gray-600" />
           </Button>
         </Link>
@@ -60,7 +60,7 @@ export function AdminHeader() {
                   {user?.name || 'Admin'}
                 </p>
                 <p className="text-xs text-gray-500 mt-1 uppercase tracking-wider font-medium">
-                  {user?.role || 'Administrator'}
+                  {user?.role || 'Quản Trị Viên'}
                 </p>
               </div>
               <Avatar className="h-9 w-9 border-2 border-blue-100">
@@ -72,16 +72,16 @@ export function AdminHeader() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56 mt-1">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuLabel>Tài Khoản</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <User className="mr-2 h-4 w-4" /> Profile settings
+              <User className="mr-2 h-4 w-4" /> Cài đặt hồ sơ
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={handleLogout}
               className="text-red-600 focus:text-red-600 focus:bg-red-50"
             >
-              <LogOut className="mr-2 h-4 w-4" /> Log out
+              <LogOut className="mr-2 h-4 w-4" /> Đăng xuất
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

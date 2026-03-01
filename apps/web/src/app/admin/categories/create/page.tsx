@@ -33,12 +33,12 @@ export default function CreateCategoryPage() {
     const promise = categoryService.create(data);
 
     toast.promise(promise, {
-      loading: 'Creating category...',
+      loading: 'Đang tạo danh mục...',
       success: () => {
         router.push(ROUTES.ADMIN.CATEGORIES.BASE);
-        return 'Category created successfully';
+        return 'Tạo danh mục thành công';
       },
-      error: 'Failed to create category',
+      error: 'Tạo danh mục thất bại',
     });
   };
 
@@ -46,16 +46,16 @@ export default function CreateCategoryPage() {
     <div className="max-w-xl mx-auto py-10">
       <Card>
         <CardHeader>
-          <CardTitle>Create Category</CardTitle>
-          <CardDescription>Add a new category to organize your ceramic products.</CardDescription>
+          <CardTitle>Tạo Danh Mục Mới</CardTitle>
+          <CardDescription>Thêm mới danh mục để phân loại sản phẩm của bạn.</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Category Name</Label>
+              <Label htmlFor="name">Tên Danh Mục</Label>
               <Input
                 id="name"
-                placeholder="e.g. Traditional Ceramic, Modern Art..."
+                placeholder="Ví dụ: Gốm Truyền Thống, Nghệ Thuật Hiện Đại..."
                 {...register('name')}
                 className={errors.name ? 'border-destructive' : ''}
               />
@@ -66,10 +66,10 @@ export default function CreateCategoryPage() {
           </CardContent>
           <CardFooter className="flex justify-end space-x-2">
             <Button type="button" variant="outline" onClick={() => router.back()}>
-              Cancel
+              Hủy
             </Button>
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Creating...' : 'Create Category'}
+              {isSubmitting ? 'Đang Tạo...' : 'Tạo Danh Mục'}
             </Button>
           </CardFooter>
         </form>

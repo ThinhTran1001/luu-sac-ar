@@ -47,12 +47,12 @@ export function ProductTable() {
     const promise = productService.delete(id);
 
     toast.promise(promise, {
-      loading: 'Deleting product...',
+      loading: 'Đang xóa sản phẩm...',
       success: () => {
         queryClient.invalidateQueries({ queryKey: ['products'] });
-        return 'Product deleted successfully';
+        return 'Xóa sản phẩm thành công';
       },
-      error: 'Failed to delete product',
+      error: 'Xóa sản phẩm thất bại',
     });
   };
 
@@ -63,11 +63,11 @@ export function ProductTable() {
   const columns = getProductColumns({ onDelete: handleDelete, onEdit: handleEdit });
 
   if (isLoading) {
-    return <div className="text-center py-8">Loading products...</div>;
+    return <div className="text-center py-8">Đang tải sản phẩm...</div>;
   }
 
   if (error) {
-    return <div className="text-center py-8 text-red-600">Error loading products</div>;
+    return <div className="text-center py-8 text-red-600">Lỗi tải dữ liệu sản phẩm</div>;
   }
 
   return (

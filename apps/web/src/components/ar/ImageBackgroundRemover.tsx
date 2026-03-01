@@ -77,7 +77,7 @@ export default function ImageBackgroundRemover({
         setStatus('done');
       } catch (err) {
         console.error('Background removal failed:', err);
-        setError(err instanceof Error ? err.message : 'Failed to process image');
+        setError(err instanceof Error ? err.message : 'Lỗi xử lý hình ảnh');
         setStatus('error');
       }
     },
@@ -102,10 +102,10 @@ export default function ImageBackgroundRemover({
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Wand2 className="h-5 w-5 text-primary" />
-          AR 3D Generation
+          Tạo Mô Hình AR 3D
         </CardTitle>
         <CardDescription>
-          Upload an image to automatically remove background and generate a 3D AR model.
+          Tải lên một hình ảnh để tự động xóa phông nền và tạo mô hình AR 3D.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -116,10 +116,10 @@ export default function ImageBackgroundRemover({
           >
             <Wand2 className="h-12 w-12 text-muted-foreground mb-3" />
             <p className="text-sm font-medium text-center">
-              Click to upload image for AR 3D model
+              Nhấp để tải lên hình ảnh cho mô hình AR 3D
             </p>
             <p className="text-xs text-muted-foreground text-center mt-1">
-              Background will be removed automatically
+              Phông nền sẽ được xóa tự động
             </p>
             <input
               id="ar-image-input"
@@ -137,12 +137,12 @@ export default function ImageBackgroundRemover({
             <div className="flex items-center gap-3">
               <Loader2 className="h-5 w-5 animate-spin text-primary" />
               <span className="text-sm font-medium">
-                {status === 'compressing' ? 'Compressing image...' : 'Removing background...'}
+                {status === 'compressing' ? 'Đang nén hình ảnh...' : 'Đang xóa phông nền...'}
               </span>
             </div>
             <Progress value={progress} className="h-2" />
             <p className="text-xs text-muted-foreground text-center">
-              This may take 10-15 seconds depending on image size
+              Quá trình này có thể mất 10-15 giây tùy thuộc vào kích thước hình ảnh
             </p>
           </div>
         )}
@@ -151,18 +151,18 @@ export default function ImageBackgroundRemover({
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-green-600">
               <Check className="h-5 w-5" />
-              <span className="text-sm font-medium">Background removed successfully!</span>
+              <span className="text-sm font-medium">Xóa phông nền thành công!</span>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <p className="text-xs font-medium text-muted-foreground">Original</p>
+                <p className="text-xs font-medium text-muted-foreground">Ảnh Gốc</p>
                 <div className="relative aspect-square rounded-lg overflow-hidden border bg-muted">
                   <Image src={originalPreview} alt="Original" fill className="object-contain" />
                 </div>
               </div>
               <div className="space-y-2">
-                <p className="text-xs font-medium text-muted-foreground">Background Removed</p>
+                <p className="text-xs font-medium text-muted-foreground">Ảnh Đã Xóa Phông Nền</p>
                 <div className="relative aspect-square rounded-lg overflow-hidden border bg-[url('/checkerboard.svg')] bg-repeat">
                   <Image
                     src={processedPreview}
@@ -176,7 +176,7 @@ export default function ImageBackgroundRemover({
 
             <Button type="button" variant="outline" size="sm" onClick={handleClear}>
               <X className="h-4 w-4 mr-2" />
-              Clear & Upload Different Image
+              Xóa & Chọn Ảnh Khác
             </Button>
           </div>
         )}
@@ -192,7 +192,7 @@ export default function ImageBackgroundRemover({
               className="mt-2"
               onClick={handleClear}
             >
-              Try Again
+              Thử Lại
             </Button>
           </Alert>
         )}

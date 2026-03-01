@@ -22,7 +22,7 @@ export const getCategoryColumns = ({
 }: CategoryColumnsProps): ColumnDef<CategoryDto>[] => [
   {
     accessorKey: 'name',
-    header: ({ column }) => <ColumnHeader column={column} title="Category Name" />,
+    header: ({ column }) => <ColumnHeader column={column} title="Danh Mục" />,
     cell: ({ row }) => <div className="font-medium">{row.getValue('name')}</div>,
   },
   {
@@ -41,18 +41,18 @@ export const getCategoryColumns = ({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">Mở menu</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuLabel>Hành Động</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => onDelete(category.id)}
               className="text-destructive focus:text-destructive"
             >
               <Trash className="mr-2 h-4 w-4" />
-              Delete Category
+              Xóa Danh Mục
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

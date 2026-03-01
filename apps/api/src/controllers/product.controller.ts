@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { ProductService } from '../services/product.service';
-import { sendSuccess } from '../utils/response';
+import { sendSuccess, sendPaginated } from '../utils/response';
 import {
   CreateProductSchema,
   UpdateProductSchema,
@@ -33,8 +33,32 @@ export class ProductController {
     // Zod validation
     const dto = CreateProductSchema.parse(body);
 
-    // Get imageNoBg buffer for 3D generation (if provided)
-    const imageNoBgBuffer = files?.imageNoBg?.[0]?.buffer;
+    // Get imageNoBg buffer for 3D generation
+    let imageNoBgBuffer = files?.imageNoBg?.[0]?.buffer;
+
+    // If buffer is missing (due to Cloudinary storage), fetch it from the URL
+    if (!imageNoBgBuffer && files?.imageNoBg?.[0]?.path) {
+      console.log(
+        '[ProductController] Buffer missing, fetching from Cloudinary:',
+        files.imageNoBg[0].path,
+      );
+      try {
+        const response = await fetch(files.imageNoBg[0].path);
+        const arrayBuffer = await response.arrayBuffer();
+        imageNoBgBuffer = Buffer.from(arrayBuffer);
+        console.log(
+          '[ProductController] Buffer fetched successfully. Size:',
+          imageNoBgBuffer.length,
+        );
+      } catch (error) {
+        console.error('[ProductController] Failed to fetch imageNoBg from Cloudinary:', error);
+        // Continue without 3D generation if fetch fails
+      }
+    } else if (imageNoBgBuffer) {
+      console.log('[ProductController] Buffer present in request. Size:', imageNoBgBuffer.length);
+    } else {
+      console.log('[ProductController] No imageNoBg provided or accessible');
+    }
 
     const product = await ProductService.create(dto, imageNoBgBuffer);
     sendSuccess(res, product, MESSAGES.PRODUCT.CREATED_SUCCESS);
@@ -42,8 +66,8 @@ export class ProductController {
 
   static findAll = asyncHandler(async (req: Request, res: Response) => {
     const query = ProductQuerySchema.parse(req.query);
-    const result = await ProductService.findAll(query);
-    sendSuccess(res, result, MESSAGES.PRODUCT.LIST_RETRIEVED_SUCCESS);
+    const { data, meta } = await ProductService.findAll(query);
+    sendPaginated(res, data, meta, MESSAGES.PRODUCT.LIST_RETRIEVED_SUCCESS);
   });
 
   static findOne = asyncHandler(async (req: Request, res: Response) => {
@@ -84,8 +108,8 @@ export class ProductController {
   // Public endpoints (no auth required)
   static findAllPublic = asyncHandler(async (req: Request, res: Response) => {
     const query = PublicProductQuerySchema.parse(req.query);
-    const result = await ProductService.findAllPublic(query);
-    sendSuccess(res, result, MESSAGES.PRODUCT.LIST_RETRIEVED_SUCCESS);
+    const { data, meta } = await ProductService.findAllPublic(query);
+    sendPaginated(res, data, meta, MESSAGES.PRODUCT.LIST_RETRIEVED_SUCCESS);
   });
 
   static findOnePublic = asyncHandler(async (req: Request, res: Response) => {

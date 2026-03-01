@@ -25,7 +25,7 @@ export default function CategoryListPage() {
       setCategories(data);
     } catch (error) {
       console.error('Failed to fetch categories', error);
-      toast.error('Failed to load categories');
+      toast.error('Tải danh mục thất bại');
     } finally {
       setLoading(false);
     }
@@ -35,28 +35,28 @@ export default function CategoryListPage() {
     const promise = categoryService.delete(id);
 
     toast.promise(promise, {
-      loading: 'Deleting category...',
+      loading: 'Đang xóa danh mục...',
       success: () => {
         fetchCategories();
-        return 'Category deleted successfully';
+        return 'Xóa danh mục thành công';
       },
-      error: 'Failed to delete category',
+      error: 'Xóa danh mục thất bại',
     });
   };
 
   const columns = getCategoryColumns({ onDelete: handleDelete });
 
   if (loading)
-    return <div className="p-8 text-center text-muted-foreground">Loading categories...</div>;
+    return <div className="p-8 text-center text-muted-foreground">Đang tải danh mục...</div>;
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold tracking-tight">Categories</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Danh Mục Sản Phẩm</h1>
         <Button asChild>
           <Link href={ROUTES.ADMIN.CATEGORIES.CREATE}>
             <Plus className="mr-2 h-4 w-4" />
-            Create New
+            Tạo Mới
           </Link>
         </Button>
       </div>

@@ -32,9 +32,11 @@ export class ProductService {
 
     // If background-removed image provided, generate 3D model
     if (imageNoBgBuffer) {
+      console.log('[ProductService] Starting 3D model generation for product:', product.id);
       try {
         const { glbBuffer, fileSize } = await AR3DService.generateFromImage(imageNoBgBuffer);
         const { url: glbUrl } = await AR3DService.uploadGLBToCloudinary(glbBuffer, product.id);
+        console.log('[ProductService] 3D model generated and uploaded:', glbUrl);
 
         // Update product with GLB data
         return prisma.product.update({
@@ -52,7 +54,7 @@ export class ProductService {
           where: { id: product.id },
           data: { processingStatus: 'FAILED' },
         });
-        console.error('3D generation failed:', error);
+        console.error('[ProductService] 3D generation failed:', error);
         return prisma.product.findUnique({
           where: { id: product.id },
           include: { category: true },

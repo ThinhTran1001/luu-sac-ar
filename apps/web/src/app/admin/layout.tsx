@@ -15,12 +15,12 @@ import {
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const menuItems = [
-    { name: 'Dashboard', href: ROUTES.ADMIN.BASE, icon: LayoutDashboard },
-    { name: 'Categories', href: ROUTES.ADMIN.CATEGORIES.BASE, icon: Tag },
-    { name: 'Products', href: ROUTES.ADMIN.PRODUCTS.BASE, icon: Package },
-    { name: 'Orders', href: '/admin/orders', icon: ShoppingCart },
-    { name: 'Customers', href: '/admin/customers', icon: Users },
-    { name: 'Reports', href: '/admin/reports', icon: BarChart3 },
+    { name: 'Tổng Quan', href: ROUTES.ADMIN.BASE, icon: LayoutDashboard },
+    { name: 'Danh Mục', href: ROUTES.ADMIN.CATEGORIES.BASE, icon: Tag },
+    { name: 'Sản Phẩm', href: ROUTES.ADMIN.PRODUCTS.BASE, icon: Package },
+    { name: 'Đơn Hàng', href: ROUTES.ADMIN.ORDERS.BASE, icon: ShoppingCart },
+    { name: 'Khách Hàng', href: '/admin/customers', icon: Users },
+    { name: 'Báo Cáo', href: '/admin/reports', icon: BarChart3 },
   ];
 
   return (
@@ -56,8 +56,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
         <div className="p-4 border-t bg-gray-50/50">
           <div className="px-4 py-3 bg-blue-600 rounded-lg text-white shadow-md shadow-blue-200">
-            <p className="text-xs font-medium opacity-80 uppercase tracking-wider">Premium Plan</p>
-            <p className="text-sm font-bold mt-0.5">Luu Sac Enterprise</p>
+            <p className="text-xs font-medium opacity-80 uppercase tracking-wider">Phiên Bản</p>
+            <p className="text-sm font-bold mt-0.5">Lưu Sắc Enterprise</p>
           </div>
         </div>
       </aside>

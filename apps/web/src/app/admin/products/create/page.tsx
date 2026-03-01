@@ -16,12 +16,12 @@ export default function CreateProductPage() {
     const promise = productService.create(formData);
 
     toast.promise(promise, {
-      loading: 'Creating product...',
+      loading: 'Đang tạo sản phẩm...',
       success: () => {
         router.push(ROUTES.ADMIN.PRODUCTS.BASE);
-        return 'Product created successfully';
+        return 'Tạo sản phẩm thành công';
       },
-      error: 'Failed to create product',
+      error: 'Tạo sản phẩm thất bại',
       finally: () => setIsSubmitting(false),
     });
   };
@@ -29,9 +29,9 @@ export default function CreateProductPage() {
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       <div className="space-y-0.5">
-        <h1 className="text-3xl font-bold tracking-tight">Add New Product</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Thêm Sản Phẩm Mới</h1>
         <p className="text-muted-foreground">
-          Fill in the information below to create a new ceramic product.
+          Điền thông tin bên dưới để tạo một sản phẩm gốm sứ mới.
         </p>
       </div>
       <ProductForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />

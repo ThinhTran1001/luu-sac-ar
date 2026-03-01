@@ -3,25 +3,23 @@ import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export const metadata = {
-  title: 'Products | Luu Sac',
-  description: 'Browse our collection of handcrafted ceramic products',
+  title: 'Sản Phẩm | Lưu Sắc',
+  description: 'Khám phá bộ sưu tập gốm sứ thủ công của chúng tôi',
 };
 
 export default function ProductsPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="space-y-6">
-        <div className="space-y-2">
-          <h1 className="text-4xl font-bold tracking-tight">Our Products</h1>
-          <p className="text-muted-foreground">
-            Discover our collection of handcrafted ceramic art
-          </p>
-        </div>
-
-        <Suspense fallback={<ProductListSkeleton />}>
-          <ProductList />
-        </Suspense>
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <h1 className="text-4xl font-bold tracking-tight">Sản Phẩm Của Chúng Tôi</h1>
+        <p className="text-muted-foreground">
+          Khám phá bộ sưu tập nghệ thuật gốm sứ thủ công
+        </p>
       </div>
+
+      <Suspense fallback={<ProductListSkeleton />}>
+        <ProductList />
+      </Suspense>
     </div>
   );
 }

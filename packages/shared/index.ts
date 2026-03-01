@@ -4,3 +4,5 @@ export * from "./src/routes";
 export * from "./src/product.schema";
 export * from "./src/category.dto";
 export * from "./src/public-product.dto";
+export * from "./src/cart.dto";
+export * from "./src/order.dto";

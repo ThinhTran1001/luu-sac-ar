@@ -27,7 +27,7 @@ export const getProductColumns = ({
 }: ProductColumnsProps): ColumnDef<ProductDto>[] => [
   {
     accessorKey: 'name',
-    header: ({ column }) => <ColumnHeader column={column} title="Product" />,
+    header: ({ column }) => <ColumnHeader column={column} title="Sản Phẩm" />,
     cell: ({ row }) => {
       const product = row.original;
       return (
@@ -42,14 +42,14 @@ export const getProductColumns = ({
               />
             ) : (
               <div className="h-full w-full bg-muted flex items-center justify-center text-[10px] text-muted-foreground">
-                No IMG
+                Trống
               </div>
             )}
           </div>
           <div className="flex flex-col">
             <span className="font-medium text-sm line-clamp-1">{product.name}</span>
             <span className="text-xs text-muted-foreground font-mono">
-              Stock: {product.quantity}
+              Tồn kho: {product.quantity}
             </span>
           </div>
         </div>
@@ -58,19 +58,19 @@ export const getProductColumns = ({
   },
   {
     accessorKey: 'price',
-    header: ({ column }) => <ColumnHeader column={column} title="Price" />,
+    header: ({ column }) => <ColumnHeader column={column} title="Giá" />,
     cell: ({ row }) => {
       const price = parseFloat(row.getValue('price'));
-      const formatted = new Intl.NumberFormat('en-US', {
+      const formatted = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
-        currency: 'USD',
+        currency: 'VND',
       }).format(price);
       return <div className="font-medium">{formatted}</div>;
     },
   },
   {
     accessorKey: 'status',
-    header: ({ column }) => <ColumnHeader column={column} title="Status" />,
+    header: ({ column }) => <ColumnHeader column={column} title="Trạng Thái" />,
     cell: ({ row }) => {
       const status = row.getValue('status') as string;
       return (
@@ -89,23 +89,23 @@ export const getProductColumns = ({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">Mở menu</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[160px]">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuLabel>Hành Động</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => onEdit(product.id)}>
               <Pencil className="mr-2 h-4 w-4" />
-              Edit details
+              Chỉnh sửa chi tiết
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => onDelete(product.id)}
               className="text-destructive focus:text-destructive"
             >
               <Trash className="mr-2 h-4 w-4" />
-              Delete product
+              Xóa sản phẩm
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

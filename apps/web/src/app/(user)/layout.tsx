@@ -7,7 +7,9 @@ export default function UserLayout({ children }: { children: ReactNode }) {
     <>
       <UserHeader />
       <main className="flex-1">
-        {children}
+        <div className="container mx-auto px-4 md:px-10 lg:px-20 py-8 md:py-12">
+          {children}
+        </div>
       </main>
       <UserFooter />
     </>

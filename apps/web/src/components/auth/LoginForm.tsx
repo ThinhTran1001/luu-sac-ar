@@ -35,14 +35,14 @@ export function LoginForm() {
   const onSubmit = async (data: LoginDto) => {
     try {
       const user = await login(data);
-      toast.success('Signed in successfully');
+      toast.success('Đăng nhập thành công');
       if (user.role === 'ADMIN') {
         router.push(ROUTES.ADMIN.BASE);
       } else {
         router.push(ROUTES.HOME);
       }
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'An unexpected error occurred';
+      const message = err instanceof Error ? err.message : 'Có lỗi không mong muốn xảy ra';
       toast.error(message);
     }
   };
@@ -50,8 +50,8 @@ export function LoginForm() {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">Sign in</CardTitle>
-        <CardDescription>Enter your email and password to access your account</CardDescription>
+        <CardTitle className="text-2xl font-bold">Đăng nhập</CardTitle>
+        <CardDescription>Nhập email và mật khẩu để truy cập tài khoản</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardContent className="space-y-4">
@@ -70,12 +70,12 @@ export function LoginForm() {
           </div>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Mật khẩu</Label>
               <Link
                 href={ROUTES.AUTH.FORGOT_PASSWORD}
                 className="text-sm font-medium text-primary hover:underline"
               >
-                Forgot password?
+                Quên mật khẩu?
               </Link>
             </div>
             <Input
@@ -91,12 +91,12 @@ export function LoginForm() {
         </CardContent>
         <CardFooter className="flex flex-col space-y-4 mt-4">
           <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? 'Signing in...' : 'Sign in'}
+            {isSubmitting ? 'Đang đăng nhập...' : 'Đăng nhập'}
           </Button>
           <div className="text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{' '}
+            Chưa có tài khoản?{' '}
             <Link href={ROUTES.AUTH.REGISTER} className="font-medium text-primary hover:underline">
-              Sign up
+              Đăng ký
             </Link>
           </div>
         </CardFooter>

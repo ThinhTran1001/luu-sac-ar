@@ -3,8 +3,10 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { useCart } from '@/context/CartContext';
 import { ROUTES } from '@/constants/routes';
 import { Button } from '@/components/ui/button';
+import { CartDrawer } from '@/components/cart/CartDrawer';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,11 +16,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ShoppingBag, User, LogOut, Settings, Menu } from 'lucide-react';
+import { ShoppingBag, User, LogOut, Settings, Menu, Package } from 'lucide-react';
 
 export function UserHeader() {
   const { user, logout } = useAuth();
+  const { getItemCount, setIsCartOpen } = useCart();
   const router = useRouter();
+  const itemCount = getItemCount();
 
   const handleLogout = async () => {
     await logout();
@@ -27,41 +31,52 @@ export function UserHeader() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <div className="flex items-center gap-8">
+      <div className="container mx-auto relative flex h-16 items-center px-4 md:px-10 lg:px-20">
+        <div className="flex-1 flex items-center">
           <Link href={ROUTES.HOME} className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black text-white font-bold">
               L
             </div>
             <span className="text-xl font-bold tracking-tight">LƯU SẮC</span>
           </Link>
-
-          <nav className="hidden md:flex items-center gap-6">
-            <Link href="/" className="text-sm font-medium hover:text-primary transition-colors">
-              Home
-            </Link>
-            <Link
-              href={ROUTES.PRODUCTS.BASE}
-              className="text-sm font-medium text-zinc-700 hover:text-black dark:text-zinc-300 dark:hover:text-white transition-colors"
-            >
-              Products
-            </Link>
-            <Link
-              href={ROUTES.CATEGORIES.BASE}
-              className="text-sm font-medium hover:text-primary transition-colors"
-            >
-              Categories
-            </Link>
-          </nav>
         </div>
 
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" className="relative">
+        <nav className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+          <Link
+            href="/"
+            className="text-sm font-semibold text-zinc-600 hover:text-black transition-colors"
+          >
+            Trang Chủ
+          </Link>
+          <Link
+            href={ROUTES.PRODUCTS.BASE}
+            className="text-sm font-semibold text-zinc-600 hover:text-black transition-colors"
+          >
+            Sản Phẩm
+          </Link>
+          <Link
+            href={ROUTES.ABOUT}
+            className="text-sm font-semibold text-zinc-600 hover:text-black transition-colors"
+          >
+            Về Chúng Tôi
+          </Link>
+        </nav>
+
+        <div className="flex-1 flex items-center justify-end gap-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative"
+            onClick={() => setIsCartOpen(true)}
+          >
             <ShoppingBag className="h-5 w-5" />
-            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[10px] text-white">
-              0
-            </span>
+            {itemCount > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[10px] text-white">
+                {itemCount > 99 ? '99+' : itemCount}
+              </span>
+            )}
           </Button>
+          <CartDrawer />
 
           {user ? (
             <DropdownMenu>
@@ -86,14 +101,20 @@ export function UserHeader() {
                 <DropdownMenuItem asChild>
                   <Link href={ROUTES.PROFILE}>
                     <User className="mr-2 h-4 w-4" />
-                    <span>Profile</span>
+                    <span>Tài Khoản</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href={ROUTES.ORDERS.BASE}>
+                    <Package className="mr-2 h-4 w-4" />
+                    <span>Đơn Hàng</span>
                   </Link>
                 </DropdownMenuItem>
                 {user.role === 'ADMIN' && (
                   <DropdownMenuItem asChild>
                     <Link href={ROUTES.ADMIN.BASE}>
                       <Settings className="mr-2 h-4 w-4" />
-                      <span>Admin Dashboard</span>
+                      <span>Quản Trị</span>
                     </Link>
                   </DropdownMenuItem>
                 )}
@@ -103,7 +124,7 @@ export function UserHeader() {
                   className="text-destructive focus:text-destructive"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
+                  <span>Đăng Xuất</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -111,11 +132,11 @@ export function UserHeader() {
             <div className="flex items-center gap-2">
               <Link href={ROUTES.AUTH.LOGIN}>
                 <Button variant="ghost" size="sm">
-                  Sign In
+                  Đăng Nhập
                 </Button>
               </Link>
               <Link href={ROUTES.AUTH.REGISTER}>
-                <Button size="sm">Sign Up</Button>
+                <Button size="sm">Đăng Ký</Button>
               </Link>
             </div>
           )}

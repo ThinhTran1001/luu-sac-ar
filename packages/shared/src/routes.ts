@@ -29,4 +29,12 @@ export const API_ROUTES = {
   AR: {
     BASE: "/admin/products",
   },
+  ORDERS: {
+    BASE: "/orders",
+    MY: "/my",
+    BY_ID: "/:id",
+    PAYMENT: "/:id/payment",
+    WEBHOOK: "/payment/webhook",
+    STATUS: "/:id/status",
+  },
 };

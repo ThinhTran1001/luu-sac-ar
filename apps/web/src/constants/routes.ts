@@ -16,6 +16,9 @@ export const ROUTES = {
       BASE: '/admin/categories',
       CREATE: '/admin/categories/create',
     },
+    ORDERS: {
+      BASE: '/admin/orders',
+    },
   },
   PRODUCTS: {
     BASE: '/products',
@@ -25,6 +28,16 @@ export const ROUTES = {
     BASE: '/categories',
     VASES: '/categories/vases',
     TABLEWARE: '/categories/tableware',
+  },
+  CART: '/cart',
+  CHECKOUT: {
+    BASE: '/checkout',
+    SUCCESS: '/checkout/success',
+    CANCEL: '/checkout/cancel',
+  },
+  ORDERS: {
+    BASE: '/orders',
+    DETAIL: (id: string) => `/orders/${id}`,
   },
   PROFILE: '/profile',
   CONTACT: '/contact',

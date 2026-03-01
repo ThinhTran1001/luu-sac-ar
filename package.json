@@ -12,9 +12,9 @@
     "lint": "npm run lint --workspaces --if-present",
     "format": "npm run format --workspaces --if-present",
     "check": "npm run lint && npm run format",
-    "db:generate": "npx prisma generate --schema=apps/api/prisma/schema.prisma",
-    "db:migrate": "npx prisma migrate dev --schema=apps/api/prisma/schema.prisma",
-    "db:studio": "npx prisma studio --schema=apps/api/prisma/schema.prisma"
+    "db:generate": "npm run db:generate -w apps/api",
+    "db:migrate": "npm run db:migrate -w apps/api",
+    "db:studio": "npm run db:studio -w apps/api"
   },
   "workspaces": [
     "apps/*",

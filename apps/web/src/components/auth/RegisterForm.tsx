@@ -35,14 +35,14 @@ export function RegisterForm() {
   const onSubmit = async (data: RegisterDto) => {
     try {
       const user = await registerAuth(data);
-      toast.success('Account created successfully');
+      toast.success('Tạo tài khoản thành công');
       if (user.role === 'ADMIN') {
         router.push(ROUTES.ADMIN.BASE);
       } else {
         router.push(ROUTES.HOME);
       }
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'An unexpected error occurred';
+      const message = err instanceof Error ? err.message : 'Có lỗi không mong muốn xảy ra';
       toast.error(message);
     }
   };
@@ -50,16 +50,16 @@ export function RegisterForm() {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
-        <CardDescription>Enter your information below to create your account</CardDescription>
+        <CardTitle className="text-2xl font-bold">Tạo tài khoản</CardTitle>
+        <CardDescription>Nhập thông tin bên dưới để tạo tài khoản</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Full Name</Label>
+            <Label htmlFor="name">Họ và Tên</Label>
             <Input
               id="name"
-              placeholder="John Doe"
+              placeholder="Nguyễn Văn A"
               {...register('name')}
               className={errors.name ? 'border-destructive' : ''}
             />
@@ -81,7 +81,7 @@ export function RegisterForm() {
             )}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Mật khẩu</Label>
             <Input
               id="password"
               type="password"
@@ -95,12 +95,12 @@ export function RegisterForm() {
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
           <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? 'Creating account...' : 'Create account'}
+            {isSubmitting ? 'Đang tạo tài khoản...' : 'Tạo tài khoản'}
           </Button>
           <div className="text-center text-sm text-muted-foreground">
-            Already have an account?{' '}
+            Đã có tài khoản?{' '}
             <Link href={ROUTES.AUTH.LOGIN} className="font-medium text-primary hover:underline">
-              Sign in
+              Đăng nhập
             </Link>
           </div>
         </CardFooter>

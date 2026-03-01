@@ -120,16 +120,16 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
         <div className="lg:col-span-2 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Basic Information</CardTitle>
-              <CardDescription>Enter the primary details for your ceramic product.</CardDescription>
+              <CardTitle>Thông Tin Cơ Bản</CardTitle>
+              <CardDescription>Nhập chi tiết chính cho sản phẩm gốm sứ của bạn.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Product Name</Label>
+                <Label htmlFor="name">Tên Sản Phẩm</Label>
                 <Input
                   id="name"
                   {...register('name')}
-                  placeholder="e.g. Blue Phoenix Vase"
+                  placeholder="Ví dụ: Bình Gốm Lục Bình"
                   className={errors.name ? 'border-destructive' : ''}
                 />
                 {errors.name && (
@@ -138,11 +138,11 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">Mô Tả</Label>
                 <Textarea
                   id="description"
                   {...register('description')}
-                  placeholder="Describe the product's history, material, and design..."
+                  placeholder="Mô tả lịch sử, chất liệu, và thiết kế của sản phẩm..."
                   rows={6}
                 />
                 {errors.description && (
@@ -161,7 +161,7 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="quantity">Quantity</Label>
+                  <Label htmlFor="quantity">Số Lượng</Label>
                   <Input id="quantity" {...register('quantity')} type="number" min="0" />
                   {errors.quantity && (
                     <p className="text-sm font-medium text-destructive">
@@ -175,9 +175,9 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
 
           <Card>
             <CardHeader>
-              <CardTitle>Gallery Images</CardTitle>
+              <CardTitle>Thư Viện Ảnh</CardTitle>
               <CardDescription>
-                Select additional high-resolution images for the gallery.
+                Chọn thêm những hình ảnh chất lượng cao cho thư viện ảnh.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -188,7 +188,7 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
                 >
                   <Upload className="h-10 w-10 text-muted-foreground mb-2" />
                   <p className="text-sm text-muted-foreground font-medium">
-                    Click to upload gallery images
+                    Nhấp để tải lên các hình ảnh thư viện
                   </p>
                   <Input
                     id="galleryImages"
@@ -235,15 +235,15 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Organization</CardTitle>
-              <CardDescription>Set product status and category.</CardDescription>
+              <CardTitle>Sắp Xếp</CardTitle>
+              <CardDescription>Thiết lập trạng thái và danh mục sản phẩm.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label>Category</Label>
+                <Label>Danh Mục</Label>
                 <Select value={categoryId} onValueChange={(val) => setValue('categoryId', val)}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a category" />
+                    <SelectValue placeholder="Chọn danh mục" />
                   </SelectTrigger>
                   <SelectContent>
                     {categories.map((c) => (
@@ -253,34 +253,34 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
                     ))}
                   </SelectContent>
                 </Select>
-                <input type="hidden" {...register('categoryId')} />
+                <input type="hidden" name="categoryId" value={categoryId || ''} />
               </div>
 
               <div className="space-y-2">
-                <Label>Status</Label>
+                <Label>Trạng Thái</Label>
                 <Select value={status} onValueChange={(val: any) => setValue('status', val)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="ACTIVE">Active</SelectItem>
-                    <SelectItem value="HIDE">Hide</SelectItem>
-                    <SelectItem value="DELETED">Deleted</SelectItem>
+                    <SelectItem value="ACTIVE">Hoạt Động</SelectItem>
+                    <SelectItem value="HIDE">Ẩn</SelectItem>
+                    <SelectItem value="DELETED">Đã Xóa</SelectItem>
                   </SelectContent>
                 </Select>
-                <input type="hidden" {...register('status')} />
+                <input type="hidden" name="status" value={status || 'ACTIVE'} />
               </div>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Product Images</CardTitle>
-              <CardDescription>Main image and thumbnail used in listings.</CardDescription>
+              <CardTitle>Ảnh Sản Phẩm</CardTitle>
+              <CardDescription>Ảnh bìa và ảnh thu nhỏ được dùng làm đại diện.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Label>Main Image</Label>
+                <Label>Ảnh Bìa Chính</Label>
                 <div className="relative aspect-video rounded-lg border-2 border-dashed flex flex-col items-center justify-center overflow-hidden bg-accent/20 group hover:border-primary/50 transition-colors">
                   {mainImagePreview ? (
                     <>
@@ -297,7 +297,7 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
                           size="sm"
                           onClick={() => document.getElementById('imageUrl')?.click()}
                         >
-                          Change Image
+                          Thay Đổi Ảnh
                         </Button>
                       </div>
                     </>
@@ -309,7 +309,7 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
                       onClick={() => document.getElementById('imageUrl')?.click()}
                     >
                       <Upload className="h-8 w-8 text-muted-foreground" />
-                      <span className="text-muted-foreground">Upload Main Image</span>
+                      <span className="text-muted-foreground">Tải Ảnh Bìa Chính</span>
                     </Button>
                   )}
                   <Input
@@ -324,7 +324,7 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
               </div>
 
               <div className="space-y-2">
-                <Label>Thumbnail Image</Label>
+                <Label>Ảnh Thu Nhỏ Thêm</Label>
                 <div className="relative h-32 w-32 mx-auto rounded-lg border-2 border-dashed flex flex-col items-center justify-center overflow-hidden bg-accent/20 group hover:border-primary/50 transition-colors">
                   {thumbnailPreview ? (
                     <>
@@ -341,7 +341,7 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
                           size="xs"
                           onClick={() => document.getElementById('thumbnailImage')?.click()}
                         >
-                          Change
+                          Đổi
                         </Button>
                       </div>
                     </>
@@ -353,7 +353,7 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
                       onClick={() => document.getElementById('thumbnailImage')?.click()}
                     >
                       <Upload className="h-6 w-6 text-muted-foreground" />
-                      <span className="text-xs text-muted-foreground">Thumbnail</span>
+                      <span className="text-xs text-muted-foreground">Ảnh Thu Nhỏ</span>
                     </Button>
                   )}
                   <Input
@@ -374,10 +374,10 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving Product...
+                  Đang Lưu Sản Phẩm...
                 </>
               ) : (
-                'Save Product'
+                'Lưu Sản Phẩm'
               )}
             </Button>
             <Button
@@ -386,7 +386,7 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
               onClick={() => window.history.back()}
               disabled={isSubmitting}
             >
-              Cancel
+              Hủy
             </Button>
           </div>
         </div>

@@ -42,7 +42,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
       <CardFooter className="p-4 pt-0">
         <Button asChild className="w-full">
-          <Link href={ROUTES.PRODUCTS.DETAIL(product.id)}>View Details</Link>
+          <Link href={ROUTES.PRODUCTS.DETAIL(product.id)}>Xem Chi Tiết</Link>
         </Button>
       </CardFooter>
     </Card>

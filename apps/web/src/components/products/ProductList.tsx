@@ -23,7 +23,7 @@ export function ProductList() {
     return (
       <Alert variant="destructive">
         <AlertDescription>
-          Failed to load products. Please try again later.
+          Lỗi tải dữ liệu sản phẩm. Vui lòng thử lại sau.
         </AlertDescription>
       </Alert>
     );
@@ -54,24 +54,24 @@ export function ProductList() {
                 disabled={data.meta.page === 1}
                 onClick={() => setFilters({ ...filters, page: filters.page - 1 })}
               >
-                Previous
+                Trước
               </Button>
               <div className="flex items-center px-4">
-                Page {data.meta.page} of {data.meta.totalPages}
+                Trang {data.meta.page} / {data.meta.totalPages}
               </div>
               <Button
                 variant="outline"
                 disabled={data.meta.page === data.meta.totalPages}
                 onClick={() => setFilters({ ...filters, page: filters.page + 1 })}
               >
-                Next
+                Sau
               </Button>
             </div>
           )}
         </>
       ) : (
         <div className="text-center py-12">
-          <p className="text-muted-foreground">No products found.</p>
+          <p className="text-muted-foreground">Không có sản phẩm nào.</p>
         </div>
       )}
     </div>

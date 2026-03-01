@@ -3,7 +3,7 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-import '@google/model-viewer';
+// Import is handled via useEffect below
 import { Button } from '@/components/ui/button';
 import { RotateCcw, Loader2, AlertCircle, Smartphone, Maximize2 } from 'lucide-react';
 import type { ModelViewerElement } from '@/types/model-viewer';
@@ -27,6 +27,11 @@ export function ProductViewer3D({
   const [hasError, setHasError] = useState(false);
   const [isARSupported, setIsARSupported] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    // Dynamic import the side-effect ONLY on the client
+    import('@google/model-viewer');
+  }, []);
 
   useEffect(() => {
     // Check AR support
@@ -78,8 +83,8 @@ export function ProductViewer3D({
     return (
       <div className="relative w-full aspect-square bg-muted rounded-lg flex flex-col items-center justify-center">
         <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-        <p className="text-sm font-medium">Generating 3D model...</p>
-        <p className="text-xs text-muted-foreground mt-1">This may take 10-15 seconds</p>
+        <p className="text-sm font-medium">Đang tạo mô hình 3D...</p>
+        <p className="text-xs text-muted-foreground mt-1">Quá trình này có thể mất 10-15 giây</p>
       </div>
     );
   }
@@ -89,9 +94,9 @@ export function ProductViewer3D({
     return (
       <div className="relative w-full aspect-square bg-muted rounded-lg flex flex-col items-center justify-center p-6">
         <AlertCircle className="h-12 w-12 text-destructive mb-4" />
-        <p className="text-sm font-medium text-center">Failed to load 3D model</p>
+        <p className="text-sm font-medium text-center">Tải mô hình 3D thất bại</p>
         <p className="text-xs text-muted-foreground text-center mt-1">
-          The 3D model could not be generated for this product.
+          Không thể tạo mô hình 3D cho sản phẩm này.
         </p>
       </div>
     );
@@ -104,9 +109,9 @@ export function ProductViewer3D({
         <div className="h-12 w-12 rounded-full bg-muted-foreground/10 flex items-center justify-center mb-4">
           <Smartphone className="h-6 w-6 text-muted-foreground" />
         </div>
-        <p className="text-sm font-medium text-center">3D View Not Available</p>
+        <p className="text-sm font-medium text-center">Không có bản Xem 3D</p>
         <p className="text-xs text-muted-foreground text-center mt-1">
-          This product doesn&apos;t have a 3D model yet.
+          Sản phẩm này chưa có mô hình 3D.
         </p>
       </div>
     );
@@ -118,7 +123,7 @@ export function ProductViewer3D({
         <div className="absolute inset-0 flex items-center justify-center bg-muted rounded-lg z-10">
           <div className="text-center">
             <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-2" />
-            <p className="text-sm text-muted-foreground">Loading 3D model...</p>
+            <p className="text-sm text-muted-foreground">Đang tải mô hình 3D...</p>
           </div>
         </div>
       )}
@@ -149,7 +154,7 @@ export function ProductViewer3D({
           className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold shadow-lg hover:bg-primary/90 transition-colors flex items-center gap-2"
         >
           <Smartphone className="h-5 w-5" />
-          View in Your Space
+          Xem Trong Không Gian Của Bạn
         </button>
 
         {/* Loading Progress */}
@@ -160,10 +165,10 @@ export function ProductViewer3D({
 
       {/* Control Buttons */}
       <div className="absolute top-4 right-4 flex gap-2">
-        <Button size="icon" variant="secondary" onClick={handleReset} title="Reset view">
+        <Button size="icon" variant="secondary" onClick={handleReset} title="Đặt lại góc nhìn">
           <RotateCcw className="h-4 w-4" />
         </Button>
-        <Button size="icon" variant="secondary" onClick={handleFullscreen} title="Fullscreen">
+        <Button size="icon" variant="secondary" onClick={handleFullscreen} title="Toàn màn hình">
           <Maximize2 className="h-4 w-4" />
         </Button>
       </div>
@@ -172,13 +177,13 @@ export function ProductViewer3D({
       {isARSupported && (
         <div className="absolute top-4 left-4 bg-green-600 text-white px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
           <Smartphone className="h-3 w-3" />
-          AR Ready
+          Hỗ trợ AR
         </div>
       )}
 
       {/* Instructions */}
       <div className="absolute bottom-4 left-4 bg-background/80 backdrop-blur-sm px-3 py-2 rounded-md text-xs">
-        <p className="text-muted-foreground">Drag to rotate • Scroll to zoom • Pinch to scale</p>
+        <p className="text-muted-foreground">Kéo để xoay • Cuộn để thu phóng • Chụm ngón tay để đổi kích thước</p>
       </div>
     </div>
   );
