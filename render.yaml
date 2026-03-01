@@ -19,11 +19,17 @@ services:
       - key: CORS_ORIGIN
         value: https://luu-sac-web.onrender.com
       - key: CLOUDINARY_CLOUD_NAME
-        sync: false
+        value: dnm1hfesq
       - key: CLOUDINARY_API_KEY
-        sync: false
+        value: 644752233173812
       - key: CLOUDINARY_API_SECRET
-        sync: false
+        value: VsCT_PMJpRj5hirtblH7D-CRsHk
+      - key: PAYOS_CLIENT_ID
+        value: d05dfd7d-9da1-4632-812a-7278316af30a
+      - key: PAYOS_API_KEY
+        value: e8d436fd-0364-45ce-8caf-15c2ec64cf66
+      - key: PAYOS_CHECKSUM_KEY
+        value: e43cad73fa0f4347b038d64dcd06cda1399f7c3e718a952d9049f2d8c82e7141
     healthCheckPath: /
 
   # Web Service
