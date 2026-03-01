@@ -16,7 +16,6 @@ interface MulterFiles {
   imageUrl?: Express.Multer.File[];
   thumbnailImage?: Express.Multer.File[];
   galleryImages?: Express.Multer.File[];
-  imageNoBg?: Express.Multer.File[]; // For AR 3D generation
 }
 
 export class ProductController {
@@ -33,34 +32,7 @@ export class ProductController {
     // Zod validation
     const dto = CreateProductSchema.parse(body);
 
-    // Get imageNoBg buffer for 3D generation
-    let imageNoBgBuffer = files?.imageNoBg?.[0]?.buffer;
-
-    // If buffer is missing (due to Cloudinary storage), fetch it from the URL
-    if (!imageNoBgBuffer && files?.imageNoBg?.[0]?.path) {
-      console.log(
-        '[ProductController] Buffer missing, fetching from Cloudinary:',
-        files.imageNoBg[0].path,
-      );
-      try {
-        const response = await fetch(files.imageNoBg[0].path);
-        const arrayBuffer = await response.arrayBuffer();
-        imageNoBgBuffer = Buffer.from(arrayBuffer);
-        console.log(
-          '[ProductController] Buffer fetched successfully. Size:',
-          imageNoBgBuffer.length,
-        );
-      } catch (error) {
-        console.error('[ProductController] Failed to fetch imageNoBg from Cloudinary:', error);
-        // Continue without 3D generation if fetch fails
-      }
-    } else if (imageNoBgBuffer) {
-      console.log('[ProductController] Buffer present in request. Size:', imageNoBgBuffer.length);
-    } else {
-      console.log('[ProductController] No imageNoBg provided or accessible');
-    }
-
-    const product = await ProductService.create(dto, imageNoBgBuffer);
+    const product = await ProductService.create(dto);
     sendSuccess(res, product, MESSAGES.PRODUCT.CREATED_SUCCESS);
   });
 

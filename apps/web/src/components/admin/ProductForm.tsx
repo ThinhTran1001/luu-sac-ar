@@ -19,7 +19,6 @@ import {
 } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, Upload, X } from 'lucide-react';
-import ImageBackgroundRemover from '@/components/ar/ImageBackgroundRemover';
 
 interface ProductFormProps {
   initialData?: Partial<ProductDto>;
@@ -41,9 +40,6 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
     initialData?.galleryImages || [],
   );
 
-  // AR 3D State
-  const [arOriginalBlob, setArOriginalBlob] = useState<Blob | null>(null);
-  const [arNoBgBlob, setArNoBgBlob] = useState<Blob | null>(null);
   const {
     register,
     handleSubmit,
@@ -104,11 +100,6 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
     e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
-
-    // Add AR images if available
-    if (arNoBgBlob) {
-      formData.append('imageNoBg', arNoBgBlob, 'image-no-bg.png');
-    }
 
     await onSubmit(formData);
   };
@@ -217,18 +208,6 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
             </CardContent>
           </Card>
 
-          {/* AR 3D Generation */}
-          <ImageBackgroundRemover
-            onProcessed={(original, noBg) => {
-              setArOriginalBlob(original);
-              setArNoBgBlob(noBg);
-            }}
-            onClear={() => {
-              setArOriginalBlob(null);
-              setArNoBgBlob(null);
-            }}
-            disabled={isSubmitting}
-          />
         </div>
 
         {/* Right Column: Organization & Featured Images */}
