@@ -36,11 +36,11 @@ export const globalErrorHandler = (
   }
 
   if (err instanceof ZodError) {
-    const first = err.errors[0];
+    const first = err.issues[0];
     const message = first
       ? `${first.path.join('.')}: ${first.message}`
       : 'Dữ liệu không hợp lệ';
-    logger.warn(`VALIDATION ERROR: ${message}`, { ...meta, statusCode: 400, errors: err.errors });
+    logger.warn(`VALIDATION ERROR: ${message}`, { ...meta, statusCode: 400, errors: err.issues });
     return sendError(res, message, 400);
   }
 
