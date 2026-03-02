@@ -11,6 +11,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface ProductViewer3DProps {
   modelUrl: string;
+  usdzUrl?: string;
   productName: string;
   posterUrl?: string;
   processingStatus?: 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
@@ -18,6 +19,7 @@ interface ProductViewer3DProps {
 
 export function ProductViewer3D({
   modelUrl,
+  usdzUrl,
   productName,
   posterUrl,
   processingStatus = 'COMPLETED',
@@ -29,34 +31,34 @@ export function ProductViewer3D({
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
-    // Dynamic import the side-effect ONLY on the client
-    import('@google/model-viewer');
-  }, []);
-
-  useEffect(() => {
-    // Check AR support
     if (typeof window !== 'undefined') {
-      const checkAR = async () => {
-        // iOS Quick Look support
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-        // Android Scene Viewer or WebXR
-        const hasWebXR = 'xr' in navigator;
-
-        setIsARSupported(isIOS || hasWebXR);
-      };
-      checkAR();
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      const hasWebXR = 'xr' in navigator;
+      setIsARSupported(isIOS || hasWebXR);
     }
   }, []);
 
-  const handleLoad = () => {
-    setIsLoading(false);
-    setHasError(false);
-  };
+  useEffect(() => {
+    const viewer = viewerRef.current;
+    if (!viewer) return;
 
-  const handleError = () => {
-    setIsLoading(false);
-    setHasError(true);
-  };
+    const onLoad = () => {
+      setIsLoading(false);
+      setHasError(false);
+    };
+    const onError = () => {
+      setIsLoading(false);
+      setHasError(true);
+    };
+
+    viewer.addEventListener('load', onLoad);
+    viewer.addEventListener('error', onError);
+
+    return () => {
+      viewer.removeEventListener('load', onLoad);
+      viewer.removeEventListener('error', onError);
+    };
+  }, [modelUrl]);
 
   const handleReset = () => {
     if (viewerRef.current) {
@@ -131,10 +133,12 @@ export function ProductViewer3D({
       <model-viewer
         ref={viewerRef}
         src={modelUrl}
+        ios-src={usdzUrl}
         alt={productName}
         poster={posterUrl}
         ar
         ar-modes="webxr scene-viewer quick-look"
+        ar-placement="floor"
         camera-controls
         touch-action="pan-y"
         auto-rotate
@@ -145,8 +149,6 @@ export function ProductViewer3D({
         exposure="1"
         className="w-full h-full rounded-lg"
         style={{ width: '100%', height: '100%' }}
-        onLoad={handleLoad}
-        onError={handleError}
       >
         {/* AR Button (shows on AR-capable devices) */}
         <button

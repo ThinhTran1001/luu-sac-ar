@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, ProcessingStatus } from '@prisma/client';
 import {
   CreateProductDto,
   UpdateProductDto,
@@ -7,13 +7,18 @@ import {
 } from '@luu-sac/shared';
 import prisma from '../utils/prisma';
 import { NotFoundException } from '../utils/app-error';
+import { AR3DService } from './ar-3d.service';
 
 export class ProductService {
   /**
-   * Create product
+   * Create product with optional 3D model (from TripoSR glbUrl or legacy imageNoBg generation)
    */
-  static async create(dto: CreateProductDto) {
-    // Create product first (explicitly pick fields to avoid passing extra DTO fields)
+  static async create(
+    dto: CreateProductDto,
+    options?: { glbUrl?: string; imageNoBgBuffer?: Buffer },
+  ) {
+    const has3D = !!(options?.glbUrl || options?.imageNoBgBuffer);
+
     const product = await prisma.product.create({
       data: {
         name: dto.name,
@@ -25,8 +30,51 @@ export class ProductService {
         galleryImages: dto.galleryImages,
         categoryId: dto.categoryId,
         status: dto.status,
+        processingStatus: has3D ? ProcessingStatus.PROCESSING : ProcessingStatus.PENDING,
       },
     });
+
+    // TripoSR: use glbUrl directly
+    if (options?.glbUrl) {
+      return prisma.product.update({
+        where: { id: product.id },
+        data: {
+          glbUrl: options.glbUrl,
+          processingStatus: 'COMPLETED',
+        },
+        include: { category: true },
+      });
+    }
+
+    // Legacy: generate 3D from imageNoBg
+    if (options?.imageNoBgBuffer) {
+      try {
+        const { glbBuffer, fileSize } = await AR3DService.generateFromImage(
+          options.imageNoBgBuffer,
+        );
+        const { url: glbUrl } = await AR3DService.uploadGLBToCloudinary(glbBuffer, product.id);
+
+        return prisma.product.update({
+          where: { id: product.id },
+          data: {
+            glbUrl,
+            glbFileSize: fileSize,
+            processingStatus: 'COMPLETED',
+          },
+          include: { category: true },
+        });
+      } catch (error) {
+        await prisma.product.update({
+          where: { id: product.id },
+          data: { processingStatus: 'FAILED' },
+        });
+        console.error('3D generation failed:', error);
+        return prisma.product.findUnique({
+          where: { id: product.id },
+          include: { category: true },
+        });
+      }
+    }
 
     return prisma.product.findUnique({
       where: { id: product.id },

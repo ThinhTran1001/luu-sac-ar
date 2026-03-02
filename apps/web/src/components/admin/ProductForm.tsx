@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, Upload, X } from 'lucide-react';
+import TripoSR3DGenerator from '@/components/ar/TripoSR3DGenerator';
 
 interface ProductFormProps {
   initialData?: Partial<ProductDto>;
@@ -40,6 +41,9 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
     initialData?.galleryImages || [],
   );
 
+  // AR 3D State (GLB + USDZ URLs from TripoSR API)
+  const [arGlbUrl, setArGlbUrl] = useState<string | null>(null);
+  const [arUsdzUrl, setArUsdzUrl] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -100,6 +104,13 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
     e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
+
+    if (arGlbUrl) {
+      formData.append('glbUrl', arGlbUrl);
+    }
+    if (arUsdzUrl) {
+      formData.append('usdzUrl', arUsdzUrl);
+    }
 
     await onSubmit(formData);
   };
@@ -208,6 +219,18 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
             </CardContent>
           </Card>
 
+          {/* AR 3D Generation (TripoSR API) */}
+          <TripoSR3DGenerator
+            onSuccess={(glbUrl, usdzUrl) => {
+              setArGlbUrl(glbUrl);
+              setArUsdzUrl(usdzUrl);
+            }}
+            onClear={() => {
+              setArGlbUrl(null);
+              setArUsdzUrl(null);
+            }}
+            disabled={isSubmitting}
+          />
         </div>
 
         {/* Right Column: Organization & Featured Images */}

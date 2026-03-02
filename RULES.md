@@ -10,6 +10,7 @@
 | [CONVENTIONS.md](./docs/CONVENTIONS.md)       | Naming conventions and directory structure |
 | [BEST_PRACTICES.md](./docs/BEST_PRACTICES.md) | Code patterns and examples                 |
 | [RULES.md](./docs/RULES.md)                   | Strict rules and checklists                |
+| [PRODUCT-CREATE-API.md](./docs/PRODUCT-CREATE-API.md) | API tạo product + AR 3D (cho Web Agent)   |
 
 ## Quick Start
 

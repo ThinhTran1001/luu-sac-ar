@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev:web": "npm run dev -w apps/web",
+    "dev:web:ar": "npm run dev:ar -w apps/web",
     "dev:api": "npm run dev -w apps/api",
     "build": "npm run build --workspaces --if-present",
     "build:shared": "npm run build -w packages/shared",

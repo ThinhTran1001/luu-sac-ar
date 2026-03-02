@@ -16,6 +16,7 @@ interface MulterFiles {
   imageUrl?: Express.Multer.File[];
   thumbnailImage?: Express.Multer.File[];
   galleryImages?: Express.Multer.File[];
+  imageNoBg?: Express.Multer.File[];
 }
 
 export class ProductController {
@@ -32,7 +33,14 @@ export class ProductController {
     // Zod validation
     const dto = CreateProductSchema.parse(body);
 
-    const product = await ProductService.create(dto);
+    // glbUrl from TripoSR (frontend) or imageNoBg for legacy backend 3D generation
+    const glbUrlFromTripoSR = req.body.glbUrl as string | undefined;
+    const imageNoBgBuffer = files?.imageNoBg?.[0]?.buffer;
+
+    const product = await ProductService.create(dto, {
+      glbUrl: glbUrlFromTripoSR,
+      imageNoBgBuffer,
+    });
     sendSuccess(res, product, MESSAGES.PRODUCT.CREATED_SUCCESS);
   });
 
