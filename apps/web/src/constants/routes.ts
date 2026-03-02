@@ -11,6 +11,7 @@ export const ROUTES = {
     PRODUCTS: {
       BASE: '/admin/products',
       CREATE: '/admin/products/create',
+      EDIT: (id: string) => `/admin/products/${id}/edit`,
     },
     CATEGORIES: {
       BASE: '/admin/categories',

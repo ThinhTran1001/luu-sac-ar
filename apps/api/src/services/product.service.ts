@@ -15,7 +15,7 @@ export class ProductService {
    */
   static async create(
     dto: CreateProductDto,
-    options?: { glbUrl?: string; imageNoBgBuffer?: Buffer },
+    options?: { glbUrl?: string; usdzUrl?: string; imageNoBgBuffer?: Buffer },
   ) {
     const has3D = !!(options?.glbUrl || options?.imageNoBgBuffer);
 
@@ -34,12 +34,13 @@ export class ProductService {
       },
     });
 
-    // TripoSR: use glbUrl directly
+    // TripoSR: use glbUrl + usdzUrl directly
     if (options?.glbUrl) {
       return prisma.product.update({
         where: { id: product.id },
         data: {
           glbUrl: options.glbUrl,
+          usdzUrl: options.usdzUrl,
           processingStatus: 'COMPLETED',
         },
         include: { category: true },
@@ -138,8 +139,14 @@ export class ProductService {
     return product;
   }
 
-  static async update(id: string, dto: UpdateProductDto) {
-    await this.findOne(id); // Ensure exists
+  static async update(
+    id: string,
+    dto: UpdateProductDto,
+    options?: { glbUrl?: string; usdzUrl?: string },
+  ) {
+    await this.findOne(id);
+
+    const has3DUpdate = !!options?.glbUrl;
 
     return prisma.product.update({
       where: { id },
@@ -153,7 +160,11 @@ export class ProductService {
         ...(dto.galleryImages !== undefined && { galleryImages: dto.galleryImages }),
         ...(dto.categoryId !== undefined && { categoryId: dto.categoryId }),
         ...(dto.status !== undefined && { status: dto.status }),
+        ...(options?.glbUrl && { glbUrl: options.glbUrl }),
+        ...(options?.usdzUrl && { usdzUrl: options.usdzUrl }),
+        ...(has3DUpdate && { processingStatus: 'COMPLETED' as const }),
       },
+      include: { category: true },
     });
   }
 

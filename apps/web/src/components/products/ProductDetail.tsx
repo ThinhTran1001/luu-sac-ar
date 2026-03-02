@@ -64,6 +64,7 @@ export function ProductDetail({ productId }: ProductDetailProps) {
             <TabsContent value="3d" className="mt-4">
               <ProductViewer3D
                 modelUrl={product.glbUrl!}
+                usdzUrl={product.usdzUrl ?? undefined}
                 productName={product.name}
                 posterUrl={product.thumbnailImage || product.imageUrl}
                 processingStatus={product.processingStatus as any}

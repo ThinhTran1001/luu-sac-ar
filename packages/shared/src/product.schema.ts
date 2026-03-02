@@ -18,6 +18,7 @@ export const ProductSchema = z.object({
   thumbnailImage: z.string().url().optional().nullable(),
   galleryImages: z.array(z.string().url()),
   glbUrl: z.string().url().optional().nullable(),
+  usdzUrl: z.string().url().optional().nullable(),
   glbFileSize: z.number().optional().nullable(),
   processingStatus: ProcessingStatusSchema.optional().nullable(),
   status: ProductStatusSchema,

@@ -29,10 +29,8 @@ export default function CreateProductPage() {
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       <div className="space-y-0.5">
-        <h1 className="text-3xl font-bold tracking-tight">Thêm Sản Phẩm Mới</h1>
-        <p className="text-muted-foreground">
-          Điền thông tin bên dưới để tạo một sản phẩm gốm sứ mới.
-        </p>
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900">Thêm Sản Phẩm Mới</h1>
+        <p className="text-gray-500">Điền thông tin bên dưới để tạo một sản phẩm gốm sứ mới.</p>
       </div>
       <ProductForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
     </div>

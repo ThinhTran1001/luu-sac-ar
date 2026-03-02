@@ -9,6 +9,7 @@ import { PaginationState } from '@tanstack/react-table';
 import { toast } from 'sonner';
 import { productService } from '@/services/product.service';
 import { useQueryClient } from '@tanstack/react-query';
+import { ROUTES } from '@/constants/routes';
 
 export function ProductTable() {
   const router = useRouter();
@@ -57,7 +58,7 @@ export function ProductTable() {
   };
 
   const handleEdit = (id: string) => {
-    router.push(`/admin/products/${id}/edit`);
+    router.push(ROUTES.ADMIN.PRODUCTS.EDIT(id));
   };
 
   const columns = getProductColumns({ onDelete: handleDelete, onEdit: handleEdit });

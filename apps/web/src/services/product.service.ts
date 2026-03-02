@@ -46,7 +46,7 @@ export const productService = {
 
   findOne: async (id: string): Promise<ProductDto> => {
     const response = await api.get<ApiResponse<ProductDto>>(
-      API_ROUTES.PRODUCTS.BY_ID.replace(':id', id),
+      `${API_ROUTES.PRODUCTS.BASE}/${id}`,
     );
     return extractData(response);
   },
@@ -61,7 +61,7 @@ export const productService = {
 
   update: async (id: string, formData: FormData): Promise<ProductDto> => {
     const response = await api.put<ApiResponse<ProductDto>>(
-      API_ROUTES.PRODUCTS.BY_ID.replace(':id', id),
+      `${API_ROUTES.PRODUCTS.BASE}/${id}`,
       formData,
       {
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -71,7 +71,7 @@ export const productService = {
   },
 
   delete: async (id: string): Promise<void> => {
-    await api.delete(API_ROUTES.PRODUCTS.BY_ID.replace(':id', id));
+    await api.delete(`${API_ROUTES.PRODUCTS.BASE}/${id}`);
   },
 
   // Public product methods (no auth required)

@@ -7,6 +7,7 @@ declare module 'react' {
         src?: string;
         alt?: string;
         poster?: string;
+        crossorigin?: string;
         ar?: boolean;
         'ar-modes'?: string;
         'ar-scale'?: 'auto' | 'fixed';

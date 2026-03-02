@@ -59,6 +59,7 @@ model Product {
   thumbnailImage   String?
   galleryImages    String[]
   glbUrl           String?
+  usdzUrl          String?
   glbFileSize      Int?
   processingStatus ProcessingStatus @default(PENDING)
   status           ProductStatus    @default(ACTIVE)
