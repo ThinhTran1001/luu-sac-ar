@@ -19,15 +19,31 @@ interface MulterFiles {
   imageNoBg?: Express.Multer.File[];
 }
 
+/** Get URL from Cloudinary/multer file (path, secure_url, or url) */
+function getFileUrl(file: Express.Multer.File | undefined): string | undefined {
+  if (!file) return undefined;
+  const f = file as Express.Multer.File & { secure_url?: string; url?: string };
+  return f.path ?? f.secure_url ?? f.url;
+}
+
 export class ProductController {
   static create = asyncHandler(async (req: Request, res: Response) => {
     const files = req.files as MulterFiles;
+    const imageFile = files?.imageUrl?.[0];
+    const imageUrlPath = getFileUrl(imageFile);
+
+    if (!imageFile) {
+      throw new AppError(MESSAGES.PRODUCT.IMAGE_REQUIRED, 400);
+    }
+    if (!imageUrlPath) {
+      throw new AppError(MESSAGES.PRODUCT.UPLOAD_FAILED, 400);
+    }
 
     const body = {
       ...req.body,
-      imageUrl: files?.imageUrl?.[0]?.path,
-      thumbnailImage: files?.thumbnailImage?.[0]?.path,
-      galleryImages: files?.galleryImages?.map((f) => f.path) || [],
+      imageUrl: imageUrlPath,
+      thumbnailImage: getFileUrl(files?.thumbnailImage?.[0]),
+      galleryImages: (files?.galleryImages ?? []).map((f) => getFileUrl(f)).filter(Boolean) as string[],
     };
 
     // Zod validation
@@ -68,10 +84,12 @@ export class ProductController {
     const body = { ...req.body };
 
     // Only update images if new files are uploaded
-    if (files?.imageUrl?.[0]) body.imageUrl = files.imageUrl[0].path;
-    if (files?.thumbnailImage?.[0]) body.thumbnailImage = files.thumbnailImage[0].path;
+    const imageUrl = getFileUrl(files?.imageUrl?.[0]);
+    if (imageUrl) body.imageUrl = imageUrl;
+    const thumbUrl = getFileUrl(files?.thumbnailImage?.[0]);
+    if (thumbUrl) body.thumbnailImage = thumbUrl;
     if (files?.galleryImages?.length) {
-      body.galleryImages = files.galleryImages.map((f) => f.path);
+      body.galleryImages = files.galleryImages.map((f) => getFileUrl(f)).filter(Boolean) as string[];
     }
 
     const dto = UpdateProductSchema.parse(body);

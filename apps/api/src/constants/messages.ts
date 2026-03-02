@@ -21,6 +21,11 @@ export const MESSAGES = {
     DELETED_SUCCESS: 'Product deleted successfully',
     NOT_FOUND: 'Product not found',
     LIST_RETRIEVED_SUCCESS: 'Products retrieved successfully',
+    IMAGE_REQUIRED: 'Ảnh bìa chính (imageUrl) là bắt buộc khi tạo sản phẩm',
+    UPLOAD_FAILED:
+      'Upload ảnh thất bại. Kiểm tra biến môi trường Cloudinary (CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET) trên server.',
+    UPLOAD_FILE_TOO_LARGE: 'Ảnh vượt quá 10MB. Vui lòng chọn ảnh nhỏ hơn.',
+    UPLOAD_TOO_MANY_FILES: 'Quá nhiều file. Tối đa 1 ảnh bìa, 1 ảnh thumb, 10 ảnh thư viện.',
   },
   CATEGORY: {
     CREATED_SUCCESS: 'Category created successfully',
