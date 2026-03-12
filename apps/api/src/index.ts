@@ -10,9 +10,20 @@ import httpLogger from './middlewares/logger.middleware';
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+const corsOriginList = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',').map((o) => o.trim())
+  : ['http://localhost:3000', 'https://localhost:3000'];
+
+const isDev = process.env.NODE_ENV !== 'production';
+
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || ['http://localhost:3000', 'https://localhost:3000'],
+    origin: (origin, cb) => {
+      if (!origin) return cb(null, true);
+      if (corsOriginList.includes(origin)) return cb(null, true);
+      if (isDev) return cb(null, origin);
+      cb(null, false);
+    },
     credentials: true,
   }),
 );

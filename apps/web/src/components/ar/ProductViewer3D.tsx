@@ -17,6 +17,8 @@ interface ProductViewer3DProps {
   processingStatus?: 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
 }
 
+const LOAD_TIMEOUT_MS = 20000;
+
 export function ProductViewer3D({
   modelUrl,
   usdzUrl,
@@ -29,6 +31,11 @@ export function ProductViewer3D({
   const [hasError, setHasError] = useState(false);
   const [isARSupported, setIsARSupported] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [modelViewerReady, setModelViewerReady] = useState(false);
+
+  useEffect(() => {
+    import('@google/model-viewer').then(() => setModelViewerReady(true));
+  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -39,8 +46,13 @@ export function ProductViewer3D({
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
+    setHasError(false);
+  }, [modelUrl]);
+
+  useEffect(() => {
     const viewer = viewerRef.current;
-    if (!viewer) return;
+    if (!viewer || !modelViewerReady) return;
 
     const onLoad = () => {
       setIsLoading(false);
@@ -51,14 +63,20 @@ export function ProductViewer3D({
       setHasError(true);
     };
 
+    const timeoutId = setTimeout(() => {
+      setIsLoading(false);
+      setHasError(true);
+    }, LOAD_TIMEOUT_MS);
+
     viewer.addEventListener('load', onLoad);
     viewer.addEventListener('error', onError);
 
     return () => {
+      clearTimeout(timeoutId);
       viewer.removeEventListener('load', onLoad);
       viewer.removeEventListener('error', onError);
     };
-  }, [modelUrl]);
+  }, [modelUrl, modelViewerReady]);
 
   const handleReset = () => {
     if (viewerRef.current) {
@@ -119,6 +137,16 @@ export function ProductViewer3D({
     );
   }
 
+  // Wait for model-viewer lib to load
+  if (!modelViewerReady) {
+    return (
+      <div className="relative w-full aspect-square bg-muted rounded-lg flex flex-col items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+        <p className="text-sm font-medium">Đang tải trình xem 3D...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="relative w-full aspect-square">
       {isLoading && (
@@ -136,14 +164,12 @@ export function ProductViewer3D({
         ios-src={usdzUrl}
         alt={productName}
         poster={posterUrl}
+        crossorigin="anonymous"
         ar
         ar-modes="webxr scene-viewer quick-look"
         ar-placement="floor"
         camera-controls
         touch-action="pan-y"
-        auto-rotate
-        auto-rotate-delay="3000"
-        rotation-per-second="30deg"
         shadow-intensity="1"
         environment-image="neutral"
         exposure="1"

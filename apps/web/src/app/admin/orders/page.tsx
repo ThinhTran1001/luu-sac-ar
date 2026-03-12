@@ -120,7 +120,7 @@ export default function AdminOrdersPage() {
         </div>
       ) : (
         <>
-          <div className="rounded-md border">
+          <div className="rounded-md border bg-white shadow-sm">
             <Table>
               <TableHeader>
                 <TableRow>

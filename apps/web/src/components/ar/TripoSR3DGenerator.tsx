@@ -91,23 +91,27 @@ export default function TripoSR3DGenerator({
   const isProcessing = status === 'processing';
 
   return (
-    <Card>
+    <Card className="bg-white shadow-sm">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Wand2 className="h-5 w-5 text-primary" />
+        <CardTitle className="flex items-center gap-2 text-gray-900">
+          <Wand2 className="h-5 w-5 text-blue-600" />
           Tạo mô hình 3D AR
         </CardTitle>
-        <CardDescription>Tải ảnh lên để tạo mô hình 3D cho AR.</CardDescription>
+        <CardDescription className="text-gray-500">
+          Tải ảnh lên để tạo mô hình 3D cho AR.
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {status === 'idle' && (
           <div
-            className="border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center hover:bg-accent/50 transition-colors cursor-pointer"
+            className="border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center hover:bg-blue-50 hover:text-blue-600 transition-colors cursor-pointer"
             onClick={() => !disabled && document.getElementById('ar-image-input')?.click()}
           >
-            <Wand2 className="h-12 w-12 text-muted-foreground mb-3" />
-            <p className="text-sm font-medium text-center">Nhấn để tải ảnh lên tạo mô hình 3D AR</p>
-            <p className="text-xs text-muted-foreground text-center mt-1">
+            <Wand2 className="h-12 w-12 text-blue-600 mb-3" />
+            <p className="text-sm font-medium text-center text-gray-900">
+              Nhấn để tải ảnh lên tạo mô hình 3D AR
+            </p>
+            <p className="text-xs text-gray-500 text-center mt-1">
               PNG, JPEG, JPG, WebP • ~8–15 giây
             </p>
             <input
@@ -124,7 +128,7 @@ export default function TripoSR3DGenerator({
         {isProcessing && (
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <Loader2 className="h-5 w-5 animate-spin text-primary shrink-0" />
+              <Loader2 className="h-5 w-5 animate-spin text-blue-600 shrink-0" />
               <div className="flex-1 min-w-0">
                 <span className="text-sm font-medium">{progress}%</span>
                 {progressMessage && (
@@ -156,7 +160,7 @@ export default function TripoSR3DGenerator({
         )}
 
         {status === 'error' && error && (
-          <Alert variant="destructive">
+          <Alert variant="destructive" className="bg-red-50 text-red-600">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>{error}</AlertDescription>
             <Button type="button" variant="ghost" size="sm" className="mt-2" onClick={handleClear}>

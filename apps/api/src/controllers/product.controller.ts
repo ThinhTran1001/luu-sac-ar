@@ -49,12 +49,13 @@ export class ProductController {
     // Zod validation
     const dto = CreateProductSchema.parse(body);
 
-    // glbUrl from TripoSR (frontend) or imageNoBg for legacy backend 3D generation
     const glbUrlFromTripoSR = req.body.glbUrl as string | undefined;
+    const usdzUrlFromTripoSR = req.body.usdzUrl as string | undefined;
     const imageNoBgBuffer = files?.imageNoBg?.[0]?.buffer;
 
     const product = await ProductService.create(dto, {
       glbUrl: glbUrlFromTripoSR,
+      usdzUrl: usdzUrlFromTripoSR,
       imageNoBgBuffer,
     });
     sendSuccess(res, product, MESSAGES.PRODUCT.CREATED_SUCCESS);
@@ -93,7 +94,11 @@ export class ProductController {
     }
 
     const dto = UpdateProductSchema.parse(body);
-    const product = await ProductService.update(id, dto);
+
+    const glbUrl = req.body.glbUrl as string | undefined;
+    const usdzUrl = req.body.usdzUrl as string | undefined;
+
+    const product = await ProductService.update(id, dto, { glbUrl, usdzUrl });
     sendSuccess(res, product, MESSAGES.PRODUCT.UPDATED_SUCCESS);
   });
 
