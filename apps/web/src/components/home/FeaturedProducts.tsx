@@ -17,45 +17,50 @@ export function FeaturedProducts() {
   });
 
   return (
-    <section className="py-20">
-      <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+    <section className="py-16 border-t border-[var(--border)]">
+      <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
         <div className="space-y-2">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Sản Phẩm Nổi Bật</h2>
-          <p className="text-muted-foreground max-w-lg text-lg">
-            Những tác phẩm được yêu thích nhất, chế tác thủ công với niềm đam mê và sự tỉ mỉ để mang lại vẻ đẹp cho cuộc sống hàng ngày.
+          <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--primary)]">
+            Sản phẩm nổi bật
+          </h2>
+          <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-[var(--foreground)]">
+            Sản Phẩm Nổi Bật
+          </h3>
+          <p className="text-[var(--muted-foreground)] max-w-lg leading-relaxed">
+            Những tác phẩm được yêu thích nhất, chế tác thủ công với niềm đam mê và sự tỉ mỉ.
           </p>
         </div>
-        <Button asChild variant="ghost" className="hidden md:flex gap-2 text-lg h-auto py-2">
+        <Button asChild variant="outline" className="hidden md:flex gap-2 h-auto py-2 rounded-xl border-[var(--primary)] text-[var(--primary)] hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)]">
           <Link href={ROUTES.PRODUCTS.BASE}>
-            Xem Tất Cả <ArrowRight className="h-5 w-5" />
+            Xem tất cả <ArrowRight className="h-4 w-4" />
           </Link>
         </Button>
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {Array.from({ length: 8 }).map((_, i) => (
-            <Skeleton key={i} className="h-[420px] w-full rounded-2xl" />
+            <Skeleton key={i} className="h-[380px] w-full rounded-2xl bg-[var(--muted)]" />
           ))}
         </div>
       ) : data?.data && data.data.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {data.data.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
       ) : (
-        <div className="text-center py-20 bg-muted/30 rounded-3xl border-2 border-dashed">
-          <p className="text-xl text-muted-foreground">Bộ sưu tập sắp ra mắt.</p>
-          <Button asChild className="mt-4" variant="outline">
-            <Link href={ROUTES.PRODUCTS.BASE}>Xem Danh Mục</Link>
+        <div className="text-center py-16 bg-[var(--muted)]/50 rounded-2xl border border-[var(--border)] border-dashed">
+          <p className="text-[var(--muted-foreground)]">Bộ sưu tập sắp ra mắt.</p>
+          <Button asChild className="mt-4 rounded-xl" variant="outline">
+            <Link href={ROUTES.PRODUCTS.BASE}>Xem danh mục</Link>
           </Button>
         </div>
       )}
 
-      <div className="mt-12 md:hidden">
-        <Button asChild className="w-full text-lg h-12" variant="outline">
-          <Link href={ROUTES.PRODUCTS.BASE}>Xem Tất Cả Sản Phẩm</Link>
+      <div className="mt-10 md:hidden">
+        <Button asChild className="w-full h-12 rounded-xl" variant="outline">
+          <Link href={ROUTES.PRODUCTS.BASE}>Xem tất cả sản phẩm</Link>
         </Button>
       </div>
     </section>

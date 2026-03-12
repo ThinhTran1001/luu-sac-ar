@@ -40,19 +40,20 @@ export function ProductFilters({ filters, onFiltersChange }: ProductFiltersProps
   };
 
   return (
-    <div className="flex flex-wrap gap-4 p-4 bg-muted/50 rounded-lg">
+    <div className="flex flex-wrap gap-4 p-5 bg-[var(--card)] border border-[var(--border)] rounded-2xl">
       <div className="flex-1 min-w-[200px]">
-        <Label htmlFor="search">Tìm Kiếm</Label>
+        <Label htmlFor="search" className="text-[var(--foreground)] text-sm font-medium">Tìm kiếm</Label>
         <Input
           id="search"
           placeholder="Tìm kiếm sản phẩm..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          className="mt-1.5 rounded-xl border-[var(--border)]"
         />
       </div>
 
       <div className="w-[200px]">
-        <Label htmlFor="category">Danh Mục</Label>
+        <Label htmlFor="category" className="text-[var(--foreground)] text-sm font-medium">Danh mục</Label>
         <Select
           value={filters.categoryId || 'all'}
           onValueChange={(value) =>
@@ -63,11 +64,11 @@ export function ProductFilters({ filters, onFiltersChange }: ProductFiltersProps
             })
           }
         >
-          <SelectTrigger id="category">
-            <SelectValue placeholder="Tất cả Danh Mục" />
+          <SelectTrigger id="category" className="mt-1.5 rounded-xl">
+            <SelectValue placeholder="Tất cả danh mục" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tất cả Danh Mục</SelectItem>
+            <SelectItem value="all">Tất cả danh mục</SelectItem>
             {categories.map((cat) => (
               <SelectItem key={cat.id} value={cat.id}>
                 {cat.name}
@@ -78,7 +79,7 @@ export function ProductFilters({ filters, onFiltersChange }: ProductFiltersProps
       </div>
 
       <div className="w-[200px]">
-        <Label htmlFor="sort">Sắp Xếp</Label>
+        <Label htmlFor="sort" className="text-[var(--foreground)] text-sm font-medium">Sắp xếp</Label>
         <Select
           value={`${filters.sortBy}-${filters.sortOrder}`}
           onValueChange={(value) => {
@@ -90,23 +91,23 @@ export function ProductFilters({ filters, onFiltersChange }: ProductFiltersProps
             });
           }}
         >
-          <SelectTrigger id="sort">
+          <SelectTrigger id="sort" className="mt-1.5 rounded-xl">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="createdAt-desc">Mới Nhất</SelectItem>
-            <SelectItem value="createdAt-asc">Cũ Nhất</SelectItem>
-            <SelectItem value="price-asc">Giá: Thấp đến Cao</SelectItem>
-            <SelectItem value="price-desc">Giá: Cao đến Thấp</SelectItem>
-            <SelectItem value="name-asc">Tên: A đến Z</SelectItem>
-            <SelectItem value="name-desc">Tên: Z đến A</SelectItem>
+            <SelectItem value="createdAt-desc">Mới nhất</SelectItem>
+            <SelectItem value="createdAt-asc">Cũ nhất</SelectItem>
+            <SelectItem value="price-asc">Giá: thấp → cao</SelectItem>
+            <SelectItem value="price-desc">Giá: cao → thấp</SelectItem>
+            <SelectItem value="name-asc">Tên: A → Z</SelectItem>
+            <SelectItem value="name-desc">Tên: Z → A</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
       <div className="flex items-end">
-        <Button variant="outline" onClick={handleClearFilters}>
-          Xóa Bộ Lọc
+        <Button variant="outline" onClick={handleClearFilters} className="rounded-xl border-[var(--border)]">
+          Xóa bộ lọc
         </Button>
       </div>
     </div>

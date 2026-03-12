@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
@@ -30,33 +31,36 @@ export function UserHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md">
-      <div className="container mx-auto relative flex h-16 items-center px-4 md:px-10 lg:px-20">
+    <header className="sticky top-0 z-50 w-full border-b border-[var(--border)] bg-white shadow-sm">
+      <div className="container mx-auto relative flex h-24 md:h-28 items-center px-4 md:px-10 lg:px-20">
         <div className="flex-1 flex items-center">
           <Link href={ROUTES.HOME} className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black text-white font-bold">
-              L
-            </div>
-            <span className="text-xl font-bold tracking-tight">LƯU SẮC</span>
+            <Image
+              src="/images/luusac-logo.png"
+              alt="Lưu Sắc"
+              width={280}
+              height={96}
+              className="h-14 w-auto sm:h-16 md:h-20 lg:h-[5.5rem] object-contain"
+            />
           </Link>
         </div>
 
         <nav className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
           <Link
             href="/"
-            className="text-sm font-semibold text-zinc-600 hover:text-black transition-colors"
+            className="text-base md:text-lg font-semibold text-[var(--foreground)]/80 hover:text-[var(--primary)] transition-colors"
           >
             Trang Chủ
           </Link>
           <Link
             href={ROUTES.PRODUCTS.BASE}
-            className="text-sm font-semibold text-zinc-600 hover:text-black transition-colors"
+            className="text-base md:text-lg font-semibold text-[var(--foreground)]/80 hover:text-[var(--primary)] transition-colors"
           >
             Sản Phẩm
           </Link>
           <Link
             href={ROUTES.ABOUT}
-            className="text-sm font-semibold text-zinc-600 hover:text-black transition-colors"
+            className="text-base md:text-lg font-semibold text-[var(--foreground)]/80 hover:text-[var(--primary)] transition-colors"
           >
             Về Chúng Tôi
           </Link>
@@ -71,7 +75,7 @@ export function UserHeader() {
           >
             <ShoppingBag className="h-5 w-5" />
             {itemCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[10px] text-white">
+              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--primary)] text-[10px] text-[var(--primary-foreground)]">
                 {itemCount > 99 ? '99+' : itemCount}
               </span>
             )}

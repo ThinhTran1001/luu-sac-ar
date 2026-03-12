@@ -48,21 +48,23 @@ export function ProductList() {
           </div>
 
           {data.meta.totalPages > 1 && (
-            <div className="flex justify-center gap-2">
+            <div className="flex justify-center items-center gap-4 pt-8">
               <Button
                 variant="outline"
                 disabled={data.meta.page === 1}
                 onClick={() => setFilters({ ...filters, page: filters.page - 1 })}
+                className="rounded-xl border-[var(--border)]"
               >
                 Trước
               </Button>
-              <div className="flex items-center px-4">
+              <span className="text-sm text-[var(--muted-foreground)]">
                 Trang {data.meta.page} / {data.meta.totalPages}
-              </div>
+              </span>
               <Button
                 variant="outline"
                 disabled={data.meta.page === data.meta.totalPages}
                 onClick={() => setFilters({ ...filters, page: filters.page + 1 })}
+                className="rounded-xl border-[var(--border)]"
               >
                 Sau
               </Button>

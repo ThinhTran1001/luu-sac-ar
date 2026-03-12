@@ -6,7 +6,7 @@ export default function UserLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <UserHeader />
-      <main className="flex-1">
+      <main className="flex-1 bg-background">
         <div className="container mx-auto px-4 md:px-10 lg:px-20 py-8 md:py-12">
           {children}
         </div>
