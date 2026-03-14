@@ -36,11 +36,11 @@ export function UserHeader() {
         <div className="flex-1 flex items-center">
           <Link href={ROUTES.HOME} className="flex items-center gap-2">
             <Image
-              src="/images/luusac-logo.png"
+              src="/images/lsavt1-Photoroom.png"
               alt="Lưu Sắc"
-              width={280}
-              height={96}
-              className="h-14 w-auto sm:h-16 md:h-20 lg:h-[5.5rem] object-contain"
+              width={340}
+              height={116}
+              className="h-16 w-auto sm:h-20 md:h-24 lg:h-[6.5rem] object-contain"
             />
           </Link>
         </div>

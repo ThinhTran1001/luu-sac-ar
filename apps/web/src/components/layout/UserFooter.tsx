@@ -10,11 +10,11 @@ export function UserFooter() {
           <div className="md:col-span-2">
             <Link href={ROUTES.HOME} className="inline-block mb-4">
               <Image
-                src="/images/luusac-logo.png"
+                src="/images/lsavt1-Photoroom.png"
                 alt="Lưu Sắc"
-                width={140}
-                height={48}
-                className="h-10 w-auto object-contain"
+                width={200}
+                height={68}
+                className="h-14 w-auto object-contain"
               />
             </Link>
             <p className="max-w-sm text-sm text-[var(--muted-foreground)] leading-relaxed">
