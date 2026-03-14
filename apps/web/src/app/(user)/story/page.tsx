@@ -10,16 +10,16 @@ import { ChevronRight, ArrowLeft, Sparkles, Heart, Award } from 'lucide-react';
 const storyImages = {
   // Products that showcase craftsmanship
   craftsmanship: [
-    { src: '/images/CSE01687.jpg', alt: 'Gốm sứ thủ công tinh xảo' },
-    { src: '/images/CSE01714.jpg', alt: 'Tác phẩm nghệ thuật độc đáo' },
-    { src: '/images/CSE01731.jpg', alt: 'Sự tỉ mỉ trong từng chi tiết' },
-    { src: '/images/CSE01744.jpg', alt: 'Nghệ thuật truyền thống' },
+    { src: 'https://res.cloudinary.com/dnm1hfesq/image/upload/v1773512400/CSE01687_xatqxf.jpg', alt: 'Gốm sứ thủ công tinh xảo' },
+    { src: 'https://res.cloudinary.com/dnm1hfesq/image/upload/v1773512401/CSE01714_okk3td.jpg', alt: 'Tác phẩm nghệ thuật độc đáo' },
+    { src: 'https://res.cloudinary.com/dnm1hfesq/image/upload/v1773512398/CSE01731_gmo3vx.jpg', alt: 'Sự tỉ mỉ trong từng chi tiết' },
+    { src: 'https://res.cloudinary.com/dnm1hfesq/image/upload/v1773512397/CSE01744_tme0pc.jpg', alt: 'Nghệ thuật truyền thống' },
   ],
   // Products showing variety and artistry
   collection: [
-    { src: '/images/CSE01690.jpg', alt: 'Bình hoa thanh lịch' },
-    { src: '/images/CSE01702.jpg', alt: 'Bộ đồ ăn cao cấp' },
-    { src: '/images/CSE01727.jpg', alt: 'Tác phẩm trang trí' },
+    { src: 'https://res.cloudinary.com/dnm1hfesq/image/upload/v1773512397/CSE01690_bwd1fb.jpg', alt: 'Bình hoa thanh lịch' },
+    { src: 'https://res.cloudinary.com/dnm1hfesq/image/upload/v1773512401/CSE01702_w8tyhs.jpg', alt: 'Bộ đồ ăn cao cấp' },
+    { src: 'https://res.cloudinary.com/dnm1hfesq/image/upload/v1773512403/CSE01727_itd8lk.jpg', alt: 'Tác phẩm trang trí' },
     { src: '/images/CSE01752.jpg', alt: 'Điểm nhấn cho không gian' },
   ],
 };
