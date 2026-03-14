@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:nepgapnonsong.com)",
+      "WebSearch",
+      "Bash(ls \"E:\\\\workspace\\\\luu-sac\\\\apps\\\\web\\\\src\\\\app\\\\\\(user\\)\")",
+      "Bash(cd \"E:\\\\workspace\\\\luu-sac\" && npm run build -- --filter=web 2>&1 | head -50)",
+      "Bash(cd \"E:\\\\workspace\\\\luu-sac\\\\apps\\\\web\" && npm run build 2>&1 | tail -25)"
+    ]
+  }
+}

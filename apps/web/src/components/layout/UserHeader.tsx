@@ -64,6 +64,18 @@ export function UserHeader() {
           >
             Về Chúng Tôi
           </Link>
+          <Link
+            href={ROUTES.COLLECTION}
+            className="text-base md:text-lg font-semibold text-[var(--foreground)]/80 hover:text-[var(--primary)] transition-colors"
+          >
+            Bộ Sưu Tập
+          </Link>
+          <Link
+            href={ROUTES.STORY}
+            className="text-base md:text-lg font-semibold text-[var(--foreground)]/80 hover:text-[var(--primary)] transition-colors"
+          >
+            Câu Chuyện
+          </Link>
         </nav>
 
         <div className="flex-1 flex items-center justify-end gap-4">

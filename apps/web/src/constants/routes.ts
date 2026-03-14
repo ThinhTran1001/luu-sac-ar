@@ -45,6 +45,8 @@ export const ROUTES = {
   SHIPPING: '/shipping',
   RETURNS: '/returns',
   ABOUT: '/about',
+  COLLECTION: '/collection',
+  STORY: '/story',
   PRIVACY: '/privacy',
   TERMS: '/terms',
 };
