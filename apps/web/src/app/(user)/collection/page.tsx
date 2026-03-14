@@ -23,8 +23,8 @@ const collectionData = {
     title: 'Đồ Ăn',
     description: 'Bộ đồ ăn gốm sứ cao cấp được chế tác thủ công, hoàn hảo cho những bữa ăn gia đình hoặc tiệc quan trọng.',
     images: [
-      { src: '/images/CSE01695.jpg', name: 'Đĩa Tròn CDT 01' },
-      { src: '/images/CSE01697.jpg', name: 'Đĩa Tròn CDT 02' },
+      { src: 'https://res.cloudinary.com/dnm1hfesq/image/upload/v1773513490/CSE01695_ruacwx.jpg', name: 'Đĩa Tròn CDT 01' },
+      { src: 'https://res.cloudinary.com/dnm1hfesq/image/upload/v1773513490/CSE01697_opruih.jpg', name: 'Đĩa Tròn CDT 02' },
       { src: 'https://res.cloudinary.com/dnm1hfesq/image/upload/v1773512401/CSE01702_w8tyhs.jpg', name: 'Bộ Đồ Ăn CDT 01' },
       { src: 'https://res.cloudinary.com/dnm1hfesq/image/upload/v1773512400/CSE01706_l38hhn.jpg', name: 'Bộ Đồ Ăn CDT 02' },
       { src: 'https://res.cloudinary.com/dnm1hfesq/image/upload/v1773512400/CSE01709_bsarkn.jpg', name: 'Bộ Đồ Ăn CDT 03' },
@@ -51,8 +51,8 @@ const collectionData = {
       { src: 'https://res.cloudinary.com/dnm1hfesq/image/upload/v1773512404/CSE01743_cpfjc2.jpg', name: 'Tác Phẩm Nghệ Thuật 14' },
       { src: 'https://res.cloudinary.com/dnm1hfesq/image/upload/v1773512397/CSE01744_tme0pc.jpg', name: 'Tác Phẩm Nghệ Thuật 15' },
       { src: 'https://res.cloudinary.com/dnm1hfesq/image/upload/v1773512398/CSE01747_qrbdbg.jpg', name: 'Tác Phẩm Nghệ Thuật 16' },
-      { src: '/images/CSE01751.jpg', name: 'Tác Phẩm Nghệ Thuật 17' },
-      { src: '/images/CSE01752.jpg', name: 'Tác Phẩm Nghệ Thuật 18' },
+      { src: 'https://res.cloudinary.com/dnm1hfesq/image/upload/v1773513490/CSE01751_rqfh2s.jpg', name: 'Tác Phẩm Nghệ Thuật 17' },
+      { src: 'https://res.cloudinary.com/dnm1hfesq/image/upload/v1773513490/CSE01752_vsnxrl.jpg', name: 'Tác Phẩm Nghệ Thuật 18' },
     ],
   },
 };

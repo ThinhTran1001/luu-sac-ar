@@ -20,7 +20,7 @@ const storyImages = {
     { src: 'https://res.cloudinary.com/dnm1hfesq/image/upload/v1773512397/CSE01690_bwd1fb.jpg', alt: 'Bình hoa thanh lịch' },
     { src: 'https://res.cloudinary.com/dnm1hfesq/image/upload/v1773512401/CSE01702_w8tyhs.jpg', alt: 'Bộ đồ ăn cao cấp' },
     { src: 'https://res.cloudinary.com/dnm1hfesq/image/upload/v1773512403/CSE01727_itd8lk.jpg', alt: 'Tác phẩm trang trí' },
-    { src: '/images/CSE01752.jpg', alt: 'Điểm nhấn cho không gian' },
+    { src: 'https://res.cloudinary.com/dnm1hfesq/image/upload/v1773513490/CSE01752_vsnxrl.jpg', alt: 'Điểm nhấn cho không gian' },
   ],
 };
 
