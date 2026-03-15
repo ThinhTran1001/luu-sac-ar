@@ -17,7 +17,7 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: CORS_ORIGIN
-        value: https://69b5b0d5f87b48d47b55efb3--voluble-travesseiro-5859ab.netlify.app/
+        value: https://luusac.netlify.app/
       - key: CLOUDINARY_CLOUD_NAME
         value: dnm1hfesq
       - key: CLOUDINARY_API_KEY
