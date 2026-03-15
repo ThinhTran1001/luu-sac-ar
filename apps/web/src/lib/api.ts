@@ -1,8 +1,9 @@
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { ApiResponse } from '@luu-sac/shared';
 
-// Use relative /api - Next.js rewrites proxy to backend. Works for localhost & local network IP.
-const API_BASE_URL = '/api';
+// Production (Netlify, etc.): set NEXT_PUBLIC_API_URL to backend root including /api (e.g. https://luu-sac-api.onrender.com/api).
+// Dev: /api so Next.js rewrites proxy to local backend.
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
 
 // Custom error interface for API errors
 export interface ApiError extends Error {
