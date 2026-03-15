@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/card';
 import { toast } from 'sonner';
 import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 export function RegisterForm() {
   const { register: registerAuth } = useAuth();
@@ -48,7 +49,15 @@ export function RegisterForm() {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <div className="w-full max-w-md mx-auto space-y-4">
+      <Link
+        href={ROUTES.HOME}
+        className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Quay lại
+      </Link>
+      <Card>
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold">Tạo tài khoản</CardTitle>
         <CardDescription>Nhập thông tin bên dưới để tạo tài khoản</CardDescription>
@@ -106,5 +115,6 @@ export function RegisterForm() {
         </CardFooter>
       </form>
     </Card>
+    </div>
   );
 }

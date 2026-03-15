@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -8,6 +9,13 @@ import { useCart } from '@/context/CartContext';
 import { ROUTES } from '@/constants/routes';
 import { Button } from '@/components/ui/button';
 import { CartDrawer } from '@/components/cart/CartDrawer';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,7 +27,16 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ShoppingBag, User, LogOut, Settings, Menu, Package } from 'lucide-react';
 
+const mobileNavLinks = [
+  { href: '/', label: 'Trang Chủ' },
+  { href: ROUTES.PRODUCTS.BASE, label: 'Sản Phẩm' },
+  { href: ROUTES.ABOUT, label: 'Về Chúng Tôi' },
+  { href: ROUTES.COLLECTION, label: 'Bộ Sưu Tập' },
+  { href: ROUTES.STORY, label: 'Câu Chuyện' },
+];
+
 export function UserHeader() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, logout } = useAuth();
   const { getItemCount, setIsCartOpen } = useCart();
   const router = useRouter();
@@ -157,9 +174,30 @@ export function UserHeader() {
             </div>
           )}
 
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <Menu className="h-5 w-5" />
-          </Button>
+          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden" aria-label="Mở menu">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-[min(85vw,320px)]">
+              <SheetHeader>
+                <SheetTitle className="sr-only">Menu điều hướng</SheetTitle>
+              </SheetHeader>
+              <nav className="flex flex-col gap-1 pt-4">
+                {mobileNavLinks.map(({ href, label }) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="rounded-lg px-4 py-3 text-base font-semibold text-[var(--foreground)]/90 hover:bg-[var(--muted)] transition-colors"
+                  >
+                    {label}
+                  </Link>
+                ))}
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>
