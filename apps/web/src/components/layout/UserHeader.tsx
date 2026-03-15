@@ -57,39 +57,39 @@ export function UserHeader() {
               alt="Lưu Sắc"
               width={340}
               height={116}
-              className="h-16 w-auto sm:h-20 md:h-24 lg:h-[6.5rem] object-contain"
+              className="h-50 w-auto sm:h-20 md:h-24 lg:h-[6.5rem] object-contain"
             />
           </Link>
         </div>
 
-        <nav className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+        <nav className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2 font-luxury tracking-wide">
           <Link
             href="/"
-            className="text-base md:text-lg font-semibold text-[var(--foreground)]/80 hover:text-[var(--primary)] transition-colors"
+            className="text-2xl md:text-lg font-medium text-[var(--foreground)]/80 hover:text-[var(--primary)] transition-colors"
           >
             Trang Chủ
           </Link>
           <Link
             href={ROUTES.PRODUCTS.BASE}
-            className="text-base md:text-lg font-semibold text-[var(--foreground)]/80 hover:text-[var(--primary)] transition-colors"
+            className="text-2xl md:text-lg font-medium text-[var(--foreground)]/80 hover:text-[var(--primary)] transition-colors"
           >
             Sản Phẩm
           </Link>
           <Link
             href={ROUTES.ABOUT}
-            className="text-base md:text-lg font-semibold text-[var(--foreground)]/80 hover:text-[var(--primary)] transition-colors"
+            className="text-2xl md:text-lg font-medium text-[var(--foreground)]/80 hover:text-[var(--primary)] transition-colors"
           >
             Về Chúng Tôi
           </Link>
           <Link
             href={ROUTES.COLLECTION}
-            className="text-base md:text-lg font-semibold text-[var(--foreground)]/80 hover:text-[var(--primary)] transition-colors"
+            className="text-2xl md:text-lg font-medium text-[var(--foreground)]/80 hover:text-[var(--primary)] transition-colors"
           >
             Bộ Sưu Tập
           </Link>
           <Link
             href={ROUTES.STORY}
-            className="text-base md:text-lg font-semibold text-[var(--foreground)]/80 hover:text-[var(--primary)] transition-colors"
+            className="text-2xl md:text-lg font-medium text-[var(--foreground)]/80 hover:text-[var(--primary)] transition-colors"
           >
             Câu Chuyện
           </Link>
@@ -184,13 +184,13 @@ export function UserHeader() {
               <SheetHeader>
                 <SheetTitle className="sr-only">Menu điều hướng</SheetTitle>
               </SheetHeader>
-              <nav className="flex flex-col gap-1 pt-4">
+              <nav className="flex flex-col gap-1 pt-4 font-luxury tracking-wide">
                 {mobileNavLinks.map(({ href, label }) => (
                   <Link
                     key={href}
                     href={href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="rounded-lg px-4 py-3 text-base font-semibold text-[var(--foreground)]/90 hover:bg-[var(--muted)] transition-colors"
+                    className="rounded-lg px-4 py-3 text-base font-medium text-[var(--foreground)]/90 hover:bg-[var(--muted)] transition-colors"
                   >
                     {label}
                   </Link>

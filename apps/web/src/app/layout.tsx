@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Geist, Geist_Mono, Cormorant_Garamond } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '../context/AuthContext';
 import { Providers } from '../components/providers';
@@ -15,6 +15,12 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
+const cormorant = Cormorant_Garamond({
+  variable: '--font-luxury',
+  subsets: ['latin', 'vietnamese'],
+  weight: ['400', '500', '600'],
+});
+
 export const metadata: Metadata = {
   title: 'LƯU SẮC | Premium Ceramics & Pottery',
   description: 'Exquisite handcrafted ceramics and pottery for your modern home.',
@@ -27,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} antialiased min-h-screen flex flex-col`}>
         <Providers>
           <AuthProvider>
             {children}

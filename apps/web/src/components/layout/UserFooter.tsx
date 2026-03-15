@@ -14,7 +14,7 @@ export function UserFooter() {
                 alt="Lưu Sắc"
                 width={200}
                 height={68}
-                className="h-14 w-auto object-contain"
+                className="h-40 w-auto object-contain"
               />
             </Link>
             <p className="max-w-sm text-sm text-[var(--muted-foreground)] leading-relaxed">
