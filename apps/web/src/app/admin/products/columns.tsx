@@ -1,7 +1,7 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { ProductDto } from '@luu-sac/shared';
+import { ProductDto, CategoryDto } from '@luu-sac/shared';
 import { ColumnHeader } from '@/components/common/ColumnHeader';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
 
+type ProductWithCategory = ProductDto & { category?: CategoryDto | null };
+
 interface ProductColumnsProps {
   onDelete: (id: string) => void;
   onEdit: (id: string) => void;
@@ -24,7 +26,7 @@ interface ProductColumnsProps {
 export const getProductColumns = ({
   onDelete,
   onEdit,
-}: ProductColumnsProps): ColumnDef<ProductDto>[] => [
+}: ProductColumnsProps): ColumnDef<ProductWithCategory>[] => [
   {
     accessorKey: 'name',
     header: ({ column }) => <ColumnHeader column={column} title="Sản Phẩm" />,
@@ -57,6 +59,14 @@ export const getProductColumns = ({
     },
   },
   {
+    id: 'category',
+    header: ({ column }) => <ColumnHeader column={column} title="Danh Mục" />,
+    cell: ({ row }) => {
+      const category = row.original.category;
+      return <span className="text-sm text-muted-foreground">{category?.name || '—'}</span>;
+    },
+  },
+  {
     accessorKey: 'price',
     header: ({ column }) => <ColumnHeader column={column} title="Giá" />,
     cell: ({ row }) => {
@@ -73,11 +83,10 @@ export const getProductColumns = ({
     header: ({ column }) => <ColumnHeader column={column} title="Trạng Thái" />,
     cell: ({ row }) => {
       const status = row.getValue('status') as string;
-      return (
-        <Badge variant={status === 'ACTIVE' ? 'default' : 'secondary'} className="capitalize">
-          {status.toLowerCase()}
-        </Badge>
-      );
+      const label = status === 'ACTIVE' ? 'Hoạt Động' : status === 'HIDE' ? 'Ẩn' : status;
+      const variant =
+        status === 'ACTIVE' ? 'statusActive' : status === 'HIDE' ? 'statusHide' : 'statusDeleted';
+      return <Badge variant={variant}>{label}</Badge>;
     },
   },
   {
@@ -98,14 +107,14 @@ export const getProductColumns = ({
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => onEdit(product.id)}>
               <Pencil className="mr-2 h-4 w-4" />
-              Chỉnh sửa chi tiết
+              Chỉnh sửa
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => onDelete(product.id)}
               className="text-destructive focus:text-destructive"
             >
               <Trash className="mr-2 h-4 w-4" />
-              Xóa sản phẩm
+              Xóa
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

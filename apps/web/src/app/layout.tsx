@@ -4,6 +4,7 @@ import './globals.css';
 import { AuthProvider } from '../context/AuthContext';
 import { Providers } from '../components/providers';
 import { Toaster } from '@/components/ui/sonner';
+import Background3DProcessor from '@/components/ar/Background3DProcessor';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -38,6 +39,7 @@ export default function RootLayout({
           <AuthProvider>
             {children}
           </AuthProvider>
+          <Background3DProcessor />
           <Toaster />
         </Providers>
       </body>

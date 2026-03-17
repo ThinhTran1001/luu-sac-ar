@@ -5,9 +5,9 @@ import type { ModelViewerElement } from '@/types/model-viewer';
 import { RotateCcw, ArrowLeft, Loader2, X, Camera, AlertCircle } from 'lucide-react';
 
 const GLB_URL =
-  'https://res.cloudinary.com/dnm1hfesq/raw/upload/v1772349031/triposr/5d6148d68b6a48fda25e53d5d2e25d23.glb';
+  'https://res.cloudinary.com/dnm1hfesq/raw/upload/v1772349031/luu-sac/models/demo.glb';
 const USDZ_URL =
-  'https://res.cloudinary.com/dnm1hfesq/raw/upload/v1772351503/triposr/a8dee5fe393f46f19e3f2a0a07aa4c1f.usdz';
+  'https://res.cloudinary.com/dnm1hfesq/raw/upload/v1772351503/luu-sac/models/demo.usdz';
 
 type ViewMode = 'preview' | 'ar';
 type DeviceOS = 'ios' | 'android' | 'desktop';

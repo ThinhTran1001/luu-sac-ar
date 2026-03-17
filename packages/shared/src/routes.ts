@@ -29,6 +29,13 @@ export const API_ROUTES = {
   AR: {
     BASE: "/admin/products",
   },
+  AI3D: {
+    BASE: "/ai3d",
+    GENERATE: "/generate",
+    STATUS: "/status/:taskId",
+    CONVERT_USDZ: "/convert-usdz",
+    FINALIZE: "/finalize",
+  },
   ORDERS: {
     BASE: "/orders",
     MY: "/my",

@@ -3,7 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateProductSchema, CreateProductDto, CategoryDto, ProductDto } from '@luu-sac/shared';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { categoryService } from '@/services/category.service';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -18,19 +18,24 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, Upload, X } from 'lucide-react';
-import TripoSR3DGenerator from '@/components/ar/TripoSR3DGenerator';
+import { Loader2, Upload } from 'lucide-react';
+import { MoneyInput } from '@/components/ui/money-input';
+import AR3DGenerator from '@/components/ar/AR3DGenerator';
+
+export interface ProductFormSubmitData {
+  formData: FormData;
+  arImageFile?: File;
+}
 
 interface ProductFormProps {
   initialData?: Partial<ProductDto>;
-  onSubmit: (data: FormData) => Promise<void>;
+  onSubmit: (data: ProductFormSubmitData) => Promise<void>;
   isSubmitting: boolean;
 }
 
 export default function ProductForm({ initialData, onSubmit, isSubmitting }: ProductFormProps) {
   const [categories, setCategories] = useState<CategoryDto[]>([]);
 
-  // Preview States
   const [mainImagePreview, setMainImagePreview] = useState<string | null>(
     initialData?.imageUrl || null,
   );
@@ -41,9 +46,8 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
     initialData?.galleryImages || [],
   );
 
-  // AR 3D State (GLB + USDZ URLs from TripoSR API)
-  const [arGlbUrl, setArGlbUrl] = useState<string | null>(null);
-  const [arUsdzUrl, setArUsdzUrl] = useState<string | null>(null);
+  const [arImageFile, setArImageFile] = useState<File | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -59,7 +63,7 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
       price: initialData?.price || 0,
       quantity: initialData?.quantity || 0,
       categoryId: initialData?.categoryId || '',
-      status: initialData?.status || 'ACTIVE',
+      status: initialData?.status || 'HIDE',
     },
   });
 
@@ -70,7 +74,6 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
     categoryService.findAll().then(setCategories).catch(console.error);
   }, []);
 
-  // Cleanup object URLs
   useEffect(() => {
     return () => {
       [mainImagePreview, thumbnailPreview, ...galleryPreviews].forEach((url) => {
@@ -105,15 +108,17 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
     const form = e.currentTarget;
     const formData = new FormData(form);
 
-    if (arGlbUrl) {
-      formData.append('glbUrl', arGlbUrl);
-    }
-    if (arUsdzUrl) {
-      formData.append('usdzUrl', arUsdzUrl);
+    if (arImageFile) {
+      formData.set('status', 'HIDE');
     }
 
-    await onSubmit(formData);
+    await onSubmit({
+      formData,
+      arImageFile: arImageFile ?? undefined,
+    });
   };
+
+  const effectiveStatus = arImageFile ? 'HIDE' : status;
 
   return (
     <form onSubmit={onNativeSubmit} className="space-y-8 pb-10">
@@ -157,8 +162,14 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="price" className="text-gray-700">Giá (₫)</Label>
-                  <Input id="price" {...register('price')} type="number" min="0" step="0.01" className="text-gray-700 bg-white border-gray-300" />
+                  <Label htmlFor="price" className="text-gray-700">Giá</Label>
+                  <MoneyInput
+                    id="price"
+                    name="price"
+                    value={watch('price') || 0}
+                    onChange={(v) => setValue('price', v)}
+                    error={!!errors.price}
+                  />
                   {errors.price && (
                     <p className="text-sm font-medium text-destructive">{errors.price.message}</p>
                   )}
@@ -220,16 +231,11 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
             </CardContent>
           </Card>
 
-          {/* AR 3D Generation (TripoSR API) */}
-          <TripoSR3DGenerator
-            onSuccess={(glbUrl, usdzUrl) => {
-              setArGlbUrl(glbUrl);
-              setArUsdzUrl(usdzUrl);
-            }}
-            onClear={() => {
-              setArGlbUrl(null);
-              setArUsdzUrl(null);
-            }}
+          {/* AR 3D Generation (3D AI Studio) */}
+          <AR3DGenerator
+            productId={initialData?.id}
+            onImageSelected={(file) => setArImageFile(file)}
+            onClear={() => setArImageFile(null)}
             disabled={isSubmitting}
           />
         </div>
@@ -261,7 +267,11 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
 
               <div className="space-y-2">
                 <Label className="text-gray-700">Trạng Thái</Label>
-                <Select value={status} onValueChange={(val: any) => setValue('status', val)}>
+                <Select
+                  value={effectiveStatus}
+                  onValueChange={(val: any) => setValue('status', val)}
+                  disabled={!!arImageFile}
+                >
                   <SelectTrigger className="text-gray-700 bg-white border-gray-300">
                     <SelectValue placeholder="Chọn trạng thái" />
                   </SelectTrigger>
@@ -271,7 +281,12 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
                     <SelectItem value="DELETED" className="text-gray-700 focus:bg-blue-50 focus:text-blue-600">Đã Xóa</SelectItem>
                   </SelectContent>
                 </Select> 
-                <input type="hidden" name="status" value={status || 'ACTIVE'} />
+                {arImageFile && (
+                  <p className="text-xs text-amber-600">
+                    Trạng thái tự động đặt Ẩn khi có ảnh 3D. Sẽ chuyển Hoạt Động khi tạo 3D xong.
+                  </p>
+                )}
+                <input type="hidden" name="status" value={effectiveStatus || 'ACTIVE'} />
               </div>
             </CardContent>
           </Card>

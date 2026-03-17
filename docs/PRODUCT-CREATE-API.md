@@ -53,27 +53,28 @@ Cookie: (session cookie - tự động gửi khi dùng withCredentials: true)
 | `thumbnailImage` | File | ❌ | 1 | Ảnh thumbnail |
 | `galleryImages` | File[] | ❌ | 10 | Ảnh gallery (multiple) |
 | `imageNoBg` | File | ❌ | 1 | **Legacy:** Ảnh đã xóa nền (PNG có alpha) – backend tự generate 3D |
-| `glbUrl` | string | ❌ | — | **TripoSR:** URL GLB từ TripoSR API – dùng trực tiếp, không generate |
+| `glbUrl` | string | ❌ | — | **3D AI Studio:** URL GLB từ 3D AI Studio API – dùng trực tiếp, không generate |
 
 ---
 
-## AR 3D Generation – Luồng tích hợp (TripoSR)
+## AR 3D Generation – Luồng tích hợp (3D AI Studio)
 
-### Luồng mới: TripoSR API
+### Luồng chính: 3D AI Studio API (TRELLIS.2)
 
-1. Frontend gọi **TripoSR API** `POST /generate` với ảnh gốc.
-2. TripoSR trả về `glb_url` (Cloudinary).
-3. Frontend append `glbUrl` vào FormData khi tạo product.
-4. Backend dùng `glbUrl` trực tiếp, không generate 3D.
+1. Frontend gửi ảnh lên backend `POST /ai3d/generate`.
+2. Backend gọi **3D AI Studio API** (TRELLIS.2) và trả về `taskId`.
+3. Frontend poll `GET /ai3d/status/:taskId` cho đến khi FINISHED.
+4. Khi hoàn tất, frontend nhận `glbUrl` và append vào FormData khi tạo product.
+5. Backend dùng `glbUrl` trực tiếp, không generate 3D.
 
-**TripoSR API:** `POST {NEXT_PUBLIC_TRIPOSR_API_URL}/generate`  
-Xem `docs/TRIPOSR-API.md` (nếu có) hoặc tài liệu TripoSR.
+**3D AI Studio API:** `https://api.3daistudio.com`
+Xem [tài liệu API](https://www.3daistudio.com/Platform/API/Documentation/3d-generation).
 
 ### Luồng legacy: imageNoBg
 
-- Gửi file PNG đã xóa nền → backend generate 3D bằng Three.js lathe.
+- Gửi file PNG đã xóa nền → backend generate 3D bằng 3D AI Studio API.
 
-### Ví dụ ghép FormData (TripoSR flow)
+### Ví dụ ghép FormData (3D AI Studio flow)
 
 ```typescript
 // Tạo FormData
@@ -92,7 +93,7 @@ formData.append('imageUrl', mainImageFile);           // Required
 formData.append('thumbnailImage', thumbnailFile);     // Optional
 galleryFiles.forEach((file) => formData.append('galleryImages', file));  // Optional
 
-// AR 3D - glbUrl từ TripoSR API
+// AR 3D - glbUrl từ 3D AI Studio API
 if (glbUrl) {
   formData.append('glbUrl', glbUrl);
 }
@@ -137,7 +138,7 @@ const product = await productService.create(formData);
     "imageUrl": "https://res.cloudinary.com/.../image.jpg",
     "thumbnailImage": "https://res.cloudinary.com/.../thumb.jpg",
     "galleryImages": ["https://..."],
-    "glbUrl": "https://res.cloudinary.com/.../product-{id}.glb",
+    "glbUrl": "https://cdn.3daistudio.com/models/abc123.glb",
     "glbFileSize": 123456,
     "processingStatus": "COMPLETED",
     "status": "ACTIVE",
@@ -152,13 +153,13 @@ const product = await productService.create(formData);
 
 | Field | Mô tả |
 |-------|-------|
-| `glbUrl` | URL model 3D (GLB) trên Cloudinary. Có khi `imageNoBg` được gửi và xử lý thành công. |
+| `glbUrl` | URL model 3D (GLB) từ 3D AI Studio. Có khi ảnh được gửi và xử lý thành công. |
 | `glbFileSize` | Kích thước file GLB (bytes). |
 | `processingStatus` | `PENDING` \| `PROCESSING` \| `COMPLETED` \| `FAILED` |
 
-- Không gửi `imageNoBg`: `processingStatus` = `PENDING`, `glbUrl` = `null`.
-- Gửi `imageNoBg` và thành công: `processingStatus` = `COMPLETED`, `glbUrl` có giá trị.
-- Gửi `imageNoBg` nhưng lỗi: `processingStatus` = `FAILED`, product vẫn được tạo.
+- Không gửi ảnh: `processingStatus` = `PENDING`, `glbUrl` = `null`.
+- Gửi ảnh và thành công: `processingStatus` = `COMPLETED`, `glbUrl` có giá trị.
+- Gửi ảnh nhưng lỗi: `processingStatus` = `FAILED`, product vẫn được tạo.
 
 ### Error (4xx/5xx)
 
@@ -196,12 +197,9 @@ const product = await productService.create(formData);
 2. Upload `imageUrl`, `thumbnailImage`, `galleryImages` lên Cloudinary.
 3. Parse body và validate với `CreateProductSchema`.
 4. Tạo product trong DB.
-5. Nếu có `imageNoBg`:
-   - Tạo mesh 3D từ ảnh (sharp + Three.js).
-   - Export GLB.
-   - Upload GLB lên Cloudinary.
-   - Cập nhật `glbUrl`, `glbFileSize`, `processingStatus`.
-6. Trả về product đã tạo.
+5. Nếu có `glbUrl` từ frontend: dùng trực tiếp.
+6. Nếu có `imageNoBg` (legacy): gọi 3D AI Studio API để generate 3D, cập nhật `glbUrl`, `processingStatus`.
+7. Trả về product đã tạo.
 
 ---
 
@@ -210,7 +208,7 @@ const product = await productService.create(formData);
 - [ ] Dùng `FormData` cho request body.
 - [ ] Không set `Content-Type` thủ công khi dùng FormData.
 - [ ] Gửi `withCredentials: true` để đính kèm session cookie.
-- [ ] Append `glbUrl` khi có URL từ TripoSR API (hoặc `imageNoBg` cho luồng legacy).
+- [ ] Append `glbUrl` khi có URL từ 3D AI Studio API (hoặc `imageNoBg` cho luồng legacy).
 - [ ] Đảm bảo `imageUrl` luôn có (required).
 - [ ] `categoryId` phải là UUID hợp lệ.
 - [ ] `status` phải là một trong: `ACTIVE`, `HIDE`, `DELETED`.

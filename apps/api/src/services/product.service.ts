@@ -7,11 +7,11 @@ import {
 } from '@luu-sac/shared';
 import prisma from '../utils/prisma';
 import { NotFoundException } from '../utils/app-error';
-import { AR3DService } from './ar-3d.service';
+import { AI3DStudioService } from './ai3d-studio.service';
 
 export class ProductService {
   /**
-   * Create product with optional 3D model (from TripoSR glbUrl or legacy imageNoBg generation)
+   * Create product with optional 3D model (from 3D AI Studio glbUrl or legacy imageNoBg generation)
    */
   static async create(
     dto: CreateProductDto,
@@ -34,7 +34,7 @@ export class ProductService {
       },
     });
 
-    // TripoSR: use glbUrl + usdzUrl directly
+    // 3D AI Studio: use glbUrl + usdzUrl directly
     if (options?.glbUrl) {
       return prisma.product.update({
         where: { id: product.id },
@@ -47,19 +47,17 @@ export class ProductService {
       });
     }
 
-    // Legacy: generate 3D from imageNoBg
+    // Legacy: generate 3D from imageNoBg via 3D AI Studio
     if (options?.imageNoBgBuffer) {
       try {
-        const { glbBuffer, fileSize } = await AR3DService.generateFromImage(
-          options.imageNoBgBuffer,
-        );
-        const { url: glbUrl } = await AR3DService.uploadGLBToCloudinary(glbBuffer, product.id);
+        const mimeType = 'image/png';
+        const imageBase64 = `data:${mimeType};base64,${options.imageNoBgBuffer.toString('base64')}`;
+        const { glbUrl } = await AI3DStudioService.generateAndWait(imageBase64);
 
         return prisma.product.update({
           where: { id: product.id },
           data: {
             glbUrl,
-            glbFileSize: fileSize,
             processingStatus: 'COMPLETED',
           },
           include: { category: true },
@@ -97,7 +95,7 @@ export class ProductService {
     const skip = (page - 1) * limit;
 
     const where: Prisma.ProductWhereInput = {
-      ...(status && { status }),
+      ...(status ? { status } : { status: { not: 'DELETED' } }),
       ...(categoryId && { categoryId }),
       ...(search && {
         OR: [{ name: { contains: search, mode: 'insensitive' } }],
@@ -163,6 +161,24 @@ export class ProductService {
         ...(options?.glbUrl && { glbUrl: options.glbUrl }),
         ...(options?.usdzUrl && { usdzUrl: options.usdzUrl }),
         ...(has3DUpdate && { processingStatus: 'COMPLETED' as const }),
+      },
+      include: { category: true },
+    });
+  }
+
+  /**
+   * Finalize 3D generation: update product with GLB/USDZ URLs and set status to ACTIVE.
+   */
+  static async finalize3D(id: string, glbUrl: string, usdzUrl?: string) {
+    await this.findOne(id);
+
+    return prisma.product.update({
+      where: { id },
+      data: {
+        glbUrl,
+        ...(usdzUrl && { usdzUrl }),
+        processingStatus: 'COMPLETED',
+        status: 'ACTIVE',
       },
       include: { category: true },
     });

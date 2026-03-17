@@ -49,13 +49,13 @@ export class ProductController {
     // Zod validation
     const dto = CreateProductSchema.parse(body);
 
-    const glbUrlFromTripoSR = req.body.glbUrl as string | undefined;
-    const usdzUrlFromTripoSR = req.body.usdzUrl as string | undefined;
+    const glbUrlFrom3D = req.body.glbUrl as string | undefined;
+    const usdzUrlFrom3D = req.body.usdzUrl as string | undefined;
     const imageNoBgBuffer = files?.imageNoBg?.[0]?.buffer;
 
     const product = await ProductService.create(dto, {
-      glbUrl: glbUrlFromTripoSR,
-      usdzUrl: usdzUrlFromTripoSR,
+      glbUrl: glbUrlFrom3D,
+      usdzUrl: usdzUrlFrom3D,
       imageNoBgBuffer,
     });
     sendSuccess(res, product, MESSAGES.PRODUCT.CREATED_SUCCESS);

@@ -2,6 +2,8 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import path from 'path';
+import fs from 'fs';
 import routes from './routes';
 import { globalErrorHandler } from './middlewares/error.middleware';
 import { logger } from './utils/logger';

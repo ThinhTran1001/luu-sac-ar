@@ -1,6 +1,6 @@
 'use client';
 
-import ProductForm from '@/components/admin/ProductForm';
+import ProductForm, { type ProductFormSubmitData } from '@/components/admin/ProductForm';
 import { productService } from '@/services/product.service';
 import { useRouter, useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
@@ -8,6 +8,8 @@ import { toast } from 'sonner';
 import { ROUTES } from '@/constants/routes';
 import { Loader2 } from 'lucide-react';
 import { ProductDto } from '@luu-sac/shared';
+import { submitGeneration } from '@/services/ai3d-studio.service';
+import { useBackground3DStore } from '@/stores/background-3d.store';
 
 export default function EditProductPage() {
   const router = useRouter();
@@ -29,19 +31,36 @@ export default function EditProductPage() {
       .finally(() => setIsLoading(false));
   }, [id, router]);
 
-  const handleSubmit = async (formData: FormData) => {
-    setIsSubmitting(true);
-    const promise = productService.update(id, formData);
+  const addTask = useBackground3DStore((s) => s.addTask);
 
-    toast.promise(promise, {
-      loading: 'Đang cập nhật sản phẩm...',
-      success: () => {
-        router.push(ROUTES.ADMIN.PRODUCTS.BASE);
-        return 'Cập nhật sản phẩm thành công';
-      },
-      error: 'Cập nhật sản phẩm thất bại',
-      finally: () => setIsSubmitting(false),
-    });
+  const handleSubmit = async ({ formData, arImageFile }: ProductFormSubmitData) => {
+    setIsSubmitting(true);
+
+    try {
+      const product = await productService.update(id, formData);
+
+      if (arImageFile) {
+        const taskId = await submitGeneration(arImageFile);
+        addTask({
+          productId: product.id,
+          productName: product.name,
+          taskId,
+        });
+
+        toast.info('Sản phẩm đã được cập nhật. Đang tạo mô hình 3D trong nền...', {
+          description: 'Sản phẩm sẽ tự động chuyển sang Hoạt Động khi tạo 3D hoàn tất.',
+          duration: 5000,
+        });
+      } else {
+        toast.success('Cập nhật sản phẩm thành công');
+      }
+
+      router.push(ROUTES.ADMIN.PRODUCTS.BASE);
+    } catch {
+      toast.error('Cập nhật sản phẩm thất bại');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isLoading) {
