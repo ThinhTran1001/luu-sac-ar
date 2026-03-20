@@ -234,6 +234,11 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
           {/* AR 3D Generation (3D AI Studio) */}
           <AR3DGenerator
             productId={initialData?.id}
+            productName={initialData?.name}
+            existingGlbUrl={initialData?.glbUrl}
+            existingUsdzUrl={initialData?.usdzUrl}
+            posterUrl={initialData?.thumbnailImage || initialData?.imageUrl || null}
+            processingStatus={initialData?.processingStatus ?? null}
             onImageSelected={(file) => setArImageFile(file)}
             onClear={() => setArImageFile(null)}
             disabled={isSubmitting}

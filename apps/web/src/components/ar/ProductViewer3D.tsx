@@ -17,7 +17,8 @@ interface ProductViewer3DProps {
   processingStatus?: 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
 }
 
-const LOAD_TIMEOUT_MS = 20000;
+/** Dự phòng khi không nhận được sự kiện (model nặng / mạng chậm) */
+const LOAD_TIMEOUT_MS = 120_000;
 
 export function ProductViewer3D({
   modelUrl,
@@ -54,16 +55,29 @@ export function ProductViewer3D({
     const viewer = viewerRef.current;
     if (!viewer || !modelViewerReady) return;
 
+    let loadTimeoutId: ReturnType<typeof setTimeout> | undefined;
+
+    const clearLoadTimeout = () => {
+      if (loadTimeoutId !== undefined) {
+        clearTimeout(loadTimeoutId);
+        loadTimeoutId = undefined;
+      }
+    };
+
     const onLoad = () => {
+      clearLoadTimeout();
       setIsLoading(false);
       setHasError(false);
     };
     const onError = () => {
+      clearLoadTimeout();
       setIsLoading(false);
       setHasError(true);
     };
 
-    const timeoutId = setTimeout(() => {
+    // Cảnh báo: trước đây không clearTimeout khi load thành công → sau ~20s vẫn gọi setHasError(true)
+    // dù mô hình đã hiển thị (lỗi “tải thất bại” sau vài giây).
+    loadTimeoutId = setTimeout(() => {
       setIsLoading(false);
       setHasError(true);
     }, LOAD_TIMEOUT_MS);
@@ -71,8 +85,15 @@ export function ProductViewer3D({
     viewer.addEventListener('load', onLoad);
     viewer.addEventListener('error', onError);
 
+    // Model đã cache / load xong trước khi gắn listener — tránh bỏ lỡ sự kiện load
+    const maybeAlreadyLoaded = () => {
+      const mv = viewer as unknown as { loaded?: boolean };
+      if (mv.loaded) onLoad();
+    };
+    requestAnimationFrame(maybeAlreadyLoaded);
+
     return () => {
-      clearTimeout(timeoutId);
+      clearLoadTimeout();
       viewer.removeEventListener('load', onLoad);
       viewer.removeEventListener('error', onError);
     };
